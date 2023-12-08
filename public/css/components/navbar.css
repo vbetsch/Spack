@@ -1,0 +1,24 @@
+#navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 6%;
+    border-bottom: 1px solid var(--border-color);
+    /*position: fixed;*/
+}
+
+#navbar .logo {
+    height: 45%;
+}
+
+#navbar .right-part {
+    display: flex;
+    font-family: "JetBrains Mono", sans-serif;
+    color: var(--blue);
+    user-select: none;
+    gap: 50%;
+}
+
+#navbar .right-part .links:hover {
+    text-decoration: underline;
+}
