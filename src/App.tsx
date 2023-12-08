@@ -1,9 +1,8 @@
-function App() {
-  return (
-    <div>
-      <h1>Spack</h1>
-    </div>
-  )
+import React from "react";
+import { Router } from "./Router.tsx";
+
+function App(): React.ReactNode {
+    return <Router />;
 }
 
-export default App
+export default App;
