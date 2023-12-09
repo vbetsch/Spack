@@ -11,14 +11,21 @@
     height: 45%;
 }
 
+#navbar .logo img {
+    height: 100%;
+}
+
 #navbar .right-part {
     display: flex;
-    font-family: "JetBrains Mono", sans-serif;
-    color: var(--blue);
-    user-select: none;
     gap: 50%;
 }
 
+#navbar .right-part .links {
+    font-family: "JetBrains Mono", sans-serif;
+    text-decoration: none;
+    color: var(--blue);
+    user-select: none;
+}
 #navbar .right-part .links:hover {
     text-decoration: underline;
 }

@@ -1,9 +1,9 @@
 import React from "react";
 
-export const ThreadsPage = (): React.ReactNode => {
+export const LoginPage = (): React.ReactNode => {
     return (
         <div className="container">
-            <h1 className="title">All posts</h1>
+            <p>Login</p>
         </div>
     );
 };
