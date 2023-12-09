@@ -8,5 +8,14 @@ body {
 }
 
 .page {
-    height: 120vh;
+    height: 100vh;
+}
+
+.container {
+    padding: 0 30%;
+}
+
+.title {
+    font-family: "Poppins", sans-serif;
+    font-weight: normal;
 }
