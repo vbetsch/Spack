@@ -8,7 +8,13 @@ import { FirebaseError } from "@firebase/util";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { LoadingButton } from "@mui/lab";
 import FormControl from "@mui/material/FormControl";
-import { IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
+import {
+    IconButton,
+    Input,
+    InputAdornment,
+    InputLabel,
+    TextField,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export const LoginPage = (): React.ReactNode => {
@@ -58,12 +64,13 @@ export const LoginPage = (): React.ReactNode => {
             <form className="form">
                 <div className="form-fields">
                     <FormControl required variant={"standard"}>
-                        <InputLabel htmlFor="email">Email</InputLabel>
-                        <Input
+                        <TextField
                             {...register("email", { required: true })}
-                            id="email"
                             type="email"
-                            placeholder={"test@mail.com"}
+                            label="Email"
+                            variant="standard"
+                            placeholder="test@mail.com"
+                            required
                         />
                     </FormControl>
                     <FormControl required variant={"standard"}>
@@ -93,7 +100,9 @@ export const LoginPage = (): React.ReactNode => {
                         />
                     </FormControl>
                 </div>
-                <div className="error">{error ?? ""}</div>
+                <div className="error" style={{ color: "red" }}>
+                    {error ?? ""}
+                </div>
                 <LoadingButton
                     loading={loading}
                     loadingIndicator="Loading…"
