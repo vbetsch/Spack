@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Title } from "../Title.tsx";
+import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import type { FieldValues } from "react-hook-form";
+import { auth } from "../../database/firebase";
+import { FirebaseError } from "@firebase/util";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { LoadingButton } from "@mui/lab";
 import FormControl from "@mui/material/FormControl";
 import { IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -9,7 +14,9 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 export const LoginPage = (): React.ReactNode => {
     const [showPassword, setShowPassword] = React.useState(false);
     const { register, handleSubmit } = useForm();
-    const [errors] = useState<string[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const handleClickShowPassword = (): void => {
         setShowPassword((show) => !show);
@@ -21,22 +28,42 @@ export const LoginPage = (): React.ReactNode => {
         event.preventDefault();
     };
 
-    const onSubmit = (data: FieldValues): void => {
-        console.log(`@vbetsch ||  - onSubmit || data`);
-        console.log(data);
+    const onSubmit = async (data: FieldValues): Promise<void> => {
+        setError(null);
+        setLoading(true);
+        try {
+            await signInWithEmailAndPassword(auth, data.email, data.password);
+            setLoading(false);
+            navigate("/profile");
+        } catch (error: unknown) {
+            setLoading(false);
+            if (error instanceof FirebaseError) {
+                const errorCode = error.code;
+                if (errorCode === "auth/invalid-credential") {
+                    setError(
+                        "Les informations que vous avez renseignées sont fausses",
+                    );
+                } else {
+                    setError("Une erreur est survenue");
+                }
+            } else {
+                setError("An error has occurred");
+            }
+        }
     };
 
     return (
         <div className="container">
             <Title text={"Login"} />
-            <form className="form" onSubmit={handleSubmit(onSubmit)}>
+            <form className="form">
                 <div className="form-fields">
                     <FormControl required variant={"standard"}>
-                        <InputLabel htmlFor="username">Username</InputLabel>
+                        <InputLabel htmlFor="email">Email</InputLabel>
                         <Input
-                            {...register("username", { required: true })}
+                            {...register("email", { required: true })}
+                            id="email"
+                            type="email"
                             placeholder={"test@mail.com"}
-                            id="username"
                         />
                     </FormControl>
                     <FormControl required variant={"standard"}>
@@ -66,14 +93,15 @@ export const LoginPage = (): React.ReactNode => {
                         />
                     </FormControl>
                 </div>
-                {errors.length > 0 && (
-                    <div className="errors">
-                        {errors.map((error, key) => (
-                            <p key={key}>{error}</p>
-                        ))}
-                    </div>
-                )}
-                <button className="button">Login</button>
+                <div className="error">{error ?? ""}</div>
+                <LoadingButton
+                    loading={loading}
+                    loadingIndicator="Loading…"
+                    variant="contained"
+                    onClick={handleSubmit(onSubmit)}
+                >
+                    <span>Login</span>
+                </LoadingButton>
             </form>
         </div>
     );
