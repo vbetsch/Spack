@@ -33,13 +33,24 @@ export const RegisterPage = (): React.ReactNode => {
             } catch (error: unknown) {
                 setLoading(false);
                 if (error instanceof FirebaseError) {
-                    const errorCode = error.code;
-                    if (errorCode === "auth/weak-password") {
-                        setError("Le mot de passe est trop faible");
-                    } else if (errorCode === "auth/invalid-email") {
-                        setError("L'email est invalide");
-                    } else {
-                        setError("Une erreur est survenue : " + errorCode);
+                    switch (error.code) {
+                        case "auth/weak-password":
+                            setError("Le mot de passe est trop faible");
+                            break;
+                        case "auth/invalid-email":
+                            setError("Le format de l'email est invalide");
+                            break;
+                        case "auth/email-already-in-use":
+                            setError("L'email est déjà utilisé pour un autre compte");
+                            break;
+                        case "auth/too-many-requests":
+                            setError(
+                                "Trop de requêtes envoyées au serveur. Patientez quelques instants...",
+                            );
+                            break;
+                        default:
+                            setError("Une erreur est survenue : " + error.code);
+                            break;
                     }
                 } else {
                     setError("An error has occurred");
