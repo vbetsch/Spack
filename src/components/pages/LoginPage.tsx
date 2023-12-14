@@ -81,7 +81,7 @@ export const LoginPage = (): React.ReactNode => {
                             id="standard-adornment-password"
                             type={showPassword ? "text" : "password"}
                             {...register("password", { required: true })}
-                            placeholder={"azerty"}
+                            placeholder={"azertyuiop"}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton

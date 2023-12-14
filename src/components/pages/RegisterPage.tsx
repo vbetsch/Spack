@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Title } from "../Title.tsx";
 import FormControl from "@mui/material/FormControl";
 import {
+    FormHelperText,
     IconButton,
     Input,
     InputAdornment,
@@ -11,7 +12,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { FieldValues, useForm } from "react-hook-form";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../database/firebase.ts";
 import { FirebaseError } from "@firebase/util";
@@ -21,6 +22,7 @@ export const RegisterPage = (): React.ReactNode => {
     const { register, handleSubmit } = useForm();
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const handleClickShowPassword = (): void => {
@@ -34,33 +36,36 @@ export const RegisterPage = (): React.ReactNode => {
     };
 
     const onSubmit = async (data: FieldValues): Promise<void> => {
+        setPasswordError(null);
         setError(null);
-        setLoading(true);
-        try {
-            await createUserWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password,
+        if (data.password.length < 8) {
+            setPasswordError(
+                "Le mot de passe doit contenir au moins 8 caractères",
             );
-            setLoading(false);
-            navigate("/login");
-        } catch (error: unknown) {
-            setLoading(false);
-            if (error instanceof FirebaseError) {
-                const errorCode = error.code;
-                if (errorCode === "auth/weak-password") {
-                    setError(
-                        "Le mot de passe est trop faible",
-                    );
-                } else if (errorCode === "auth/invalid-email") {
-                    setError(
-                        "L'email est invalide",
-                    );
+        } else {
+            setLoading(true);
+            try {
+                await createUserWithEmailAndPassword(
+                    auth,
+                    data.email,
+                    data.password,
+                );
+                setLoading(false);
+                navigate("/login");
+            } catch (error: unknown) {
+                setLoading(false);
+                if (error instanceof FirebaseError) {
+                    const errorCode = error.code;
+                    if (errorCode === "auth/weak-password") {
+                        setError("Le mot de passe est trop faible");
+                    } else if (errorCode === "auth/invalid-email") {
+                        setError("L'email est invalide");
+                    } else {
+                        setError("Une erreur est survenue : " + errorCode);
+                    }
                 } else {
-                    setError("Une erreur est survenue : " + errorCode);
+                    setError("An error has occurred");
                 }
-            } else {
-                setError("An error has occurred");
             }
         }
     };
@@ -81,15 +86,18 @@ export const RegisterPage = (): React.ReactNode => {
                         />
                     </FormControl>
                     <FormControl required variant={"standard"}>
-                        <InputLabel htmlFor="standard-adornment-password">
+                        <InputLabel
+                            htmlFor="standard-adornment-password"
+                            style={passwordError ? { color: "red" } : undefined}
+                        >
                             Password
                         </InputLabel>
                         <Input
+                            error={passwordError !== null}
                             id="standard-adornment-password"
                             type={showPassword ? "text" : "password"}
                             {...register("password", { required: true })}
-                            placeholder={"azerty"}
-                            inputProps={{ minLength: 8 }}
+                            placeholder={"azertyuiop"}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -106,9 +114,17 @@ export const RegisterPage = (): React.ReactNode => {
                                 </InputAdornment>
                             }
                         />
+                        {passwordError && (
+                            <FormHelperText style={{ color: "red" }}>
+                                {passwordError}
+                            </FormHelperText>
+                        )}
                     </FormControl>
                 </div>
-                <div className="error" style={{ color: "red" }}>
+                <div
+                    className="error"
+                    style={passwordError ? { color: "red" } : undefined}
+                >
                     {error ?? ""}
                 </div>
                 <LoadingButton
