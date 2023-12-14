@@ -1,0 +1,26 @@
+.form {
+    display: flex;
+    place-content: center;
+}
+
+.form .form-content {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 30px;
+    gap: 20px;
+}
+
+.form .form-content .form-fields {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form .form-content .error {
+    font-family: "Poppins", sans-serif;
+    font-size: 12px;
+    height: 20px;
+    color: red;
+}

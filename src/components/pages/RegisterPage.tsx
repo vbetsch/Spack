@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { AuthForm } from "../AuthForm.tsx";
-import { Title } from "../Title.tsx";
 import { FieldValues } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -61,8 +60,8 @@ export const RegisterPage = (): React.ReactNode => {
 
     return (
         <div className="container">
-            <Title text={"Register"} />
             <AuthForm
+                title={"Register"}
                 loading={loading}
                 passwordError={passwordError}
                 backEndError={error}

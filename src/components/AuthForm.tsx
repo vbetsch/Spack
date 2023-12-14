@@ -11,8 +11,10 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { FieldValues, useForm } from "react-hook-form";
+import { Title } from "./Title.tsx";
 
 interface AuthFormProperties {
+    title: string;
     passwordError: string | null;
     backEndError: string | null;
     loading: boolean;
@@ -21,6 +23,7 @@ interface AuthFormProperties {
 }
 
 export const AuthForm = ({
+    title,
     passwordError,
     backEndError,
     loading,
@@ -41,68 +44,64 @@ export const AuthForm = ({
     };
 
     return (
-        <form className="form">
-            <div className="form-fields">
-                <FormControl required variant={"standard"}>
-                    <TextField
-                        {...register("email", { required: true })}
-                        type="email"
-                        label="Email"
-                        variant="standard"
-                        placeholder="test@mail.com"
-                        required
-                    />
-                </FormControl>
-                <FormControl required variant={"standard"}>
-                    <InputLabel
-                        htmlFor="standard-adornment-password"
-                        style={passwordError ? { color: "red" } : undefined}
-                    >
-                        Password
-                    </InputLabel>
-                    <Input
-                        error={passwordError !== null}
-                        id="standard-adornment-password"
-                        type={showPassword ? "text" : "password"}
-                        {...register("password", { required: true })}
-                        placeholder={"azertyuiop"}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                >
-                                    {showPassword ? (
-                                        <VisibilityOff />
-                                    ) : (
-                                        <Visibility />
-                                    )}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                    />
-                    {passwordError && (
+        <div className="form">
+            <form className="form-content">
+                <Title text={title} />
+                <div className="form-fields">
+                    <FormControl required variant={"standard"}>
+                        <TextField
+                            {...register("email", { required: true })}
+                            type="email"
+                            label="Email"
+                            variant="standard"
+                            placeholder="test@mail.com"
+                            required
+                        />
+                    </FormControl>
+                    <FormControl required variant={"standard"}>
+                        <InputLabel
+                            htmlFor="standard-adornment-password"
+                            style={passwordError ? { color: "red" } : undefined}
+                        >
+                            Password
+                        </InputLabel>
+                        <Input
+                            error={passwordError !== null}
+                            id="standard-adornment-password"
+                            type={showPassword ? "text" : "password"}
+                            {...register("password", { required: true })}
+                            placeholder={"azertyuiop"}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {showPassword ? (
+                                            <VisibilityOff />
+                                        ) : (
+                                            <Visibility />
+                                        )}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
                         <FormHelperText style={{ color: "red" }}>
                             {passwordError}
                         </FormHelperText>
-                    )}
-                </FormControl>
-            </div>
-            <div
-                className="error"
-                style={{ color: "red" }}    // TODO: Put it in style
-            >
-                {backEndError ?? ""}
-            </div>
-            <LoadingButton
-                loading={loading}
-                loadingIndicator="Loading…"
-                variant="contained"
-                onClick={handleSubmit(onSubmit)}
-            >
-                <span>{textButton}</span>
-            </LoadingButton>
-        </form>
+                    </FormControl>
+                </div>
+                <div className="error">{backEndError ?? ""}</div>
+                <LoadingButton
+                    loading={loading}
+                    loadingIndicator="Loading…"
+                    variant="contained"
+                    onClick={handleSubmit(onSubmit)}
+                >
+                    <span>{textButton}</span>
+                </LoadingButton>
+            </form>
+        </div>
     );
 };

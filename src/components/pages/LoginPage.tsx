@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Title } from "../Title.tsx";
 import { useNavigate } from "react-router";
 import type { FieldValues } from "react-hook-form";
 import { auth } from "../../database/firebase";
 import { FirebaseError } from "@firebase/util";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import {AuthForm} from "../AuthForm.tsx";
+import { AuthForm } from "../AuthForm.tsx";
 
 export const LoginPage = (): React.ReactNode => {
     const [error, setError] = useState<string | null>(null);
@@ -51,8 +50,8 @@ export const LoginPage = (): React.ReactNode => {
 
     return (
         <div className="container">
-            <Title text={"Login"} />
             <AuthForm
+                title={"Login"}
                 loading={loading}
                 passwordError={null}
                 backEndError={error}
