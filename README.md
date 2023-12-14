@@ -6,7 +6,8 @@ Social Network for developpers
 - [Mockup](docs/Maquette.pdf)
 
 ## Dependencies
-- [npm](https://www.npmjs.com/)
+- [NodeJS](https://nodejs.org/en/download)
+- [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)
 
 # Linux & MacOS
 ## Installation
