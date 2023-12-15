@@ -1,4 +1,4 @@
-import { User } from "firebase/auth";
+import { User } from "../types/UserType.ts";
 import { Action } from "../types/ActionType";
 
 export enum AuthActionEnum {
