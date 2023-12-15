@@ -18,15 +18,16 @@ export const LoginPage = (): React.ReactNode => {
         setError(null);
         setLoading(true);
         try {
-            const userCredential = await signInWithEmailAndPassword(
+            const { user } = await signInWithEmailAndPassword(
                 auth,
                 data.email,
                 data.password,
             );
             dispatch({
                 type: AuthActionEnum.LOGIN,
-                payload: userCredential.user,
+                payload: user,
             });
+            localStorage.setItem("@user", JSON.stringify(user));
             setLoading(false);
             navigate("/profile");
         } catch (error: unknown) {
