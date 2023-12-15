@@ -30,7 +30,7 @@ export const AuthForm = ({
     onSubmit,
     textButton,
 }: AuthFormProperties): React.ReactNode => {
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
     const { register, handleSubmit } = useForm();
 
     const handleClickShowPassword = (): void => {
