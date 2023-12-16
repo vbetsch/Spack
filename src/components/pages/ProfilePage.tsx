@@ -3,7 +3,6 @@ import { Title } from "../Title.tsx";
 import { AuthContext } from "../../providers/AuthProvider.tsx";
 import { AuthActionEnum } from "../../reducers/AuthReducer.ts";
 import { LoadingButton } from "@mui/lab";
-import type { BookmarkDocument } from "../../types/documents/BookmarkDocument.ts";
 import type { PostDocument } from "../../types/documents/PostDocument.ts";
 import type { AuthUser } from "../../types/AuthUserType.ts";
 
@@ -12,7 +11,6 @@ export const ProfilePage = (): React.ReactNode => {
     const userData = localStorage.getItem("@user");
     const [user, setUser] = useState<AuthUser | undefined>(undefined);
     const { state, dispatch } = useContext(AuthContext);
-    const [bookmarks, setBookmarks] = useState<BookmarkDocument[]>([]);
     const [comments, setComments] = useState<PostDocument[]>([]);
 
     const logOut = (): void => {
@@ -33,7 +31,6 @@ export const ProfilePage = (): React.ReactNode => {
             });
         }
         if (state.currentUser != null) {
-            setBookmarks(state.currentUser.bookmarks);
             setComments(state.currentUser.comments);
         }
     }, []);
@@ -42,30 +39,24 @@ export const ProfilePage = (): React.ReactNode => {
         <div className="container">
             <Title text={"Profile"} />
             <p>
-                <strong>UID</strong> : {user?.uid}
+                <strong>UID</strong> : {user != null ? user.uid : "Loading..."}
             </p>
             <p>
                 <strong>Créé le</strong> :{" "}
-                {user?.createdAt.toLocaleString(lang)}
+                {user != null
+                    ? user.createdAt.toLocaleString(lang)
+                    : "Loading..."}
             </p>
             <p>
                 <strong>Dernière connexion</strong> :{" "}
-                {user?.lastLoginAt.toLocaleString(lang)}
+                {user != null
+                    ? user.lastLoginAt.toLocaleString(lang)
+                    : "Loading..."}
             </p>
             <p>
-                <strong>Email</strong> : {user?.email}
+                <strong>Email</strong> :{" "}
+                {user != null ? user.email : "Loading..."}
             </p>
-            <p>
-                <strong>Bookmarks</strong>
-            </p>
-            {bookmarks?.length > 0 ? (
-                bookmarks.map((bookmark, key) => (
-                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
-                    <p key={key}>{bookmark.toString()}</p>
-                ))
-            ) : (
-                <p>Nothing</p>
-            )}
             <p>
                 <strong>Comments</strong>
             </p>

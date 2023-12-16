@@ -7,6 +7,7 @@ import { LoginPage } from "./components/pages/LoginPage.tsx";
 import { ProfilePage } from "./components/pages/ProfilePage.tsx";
 import { AuthProvider } from "./providers/AuthProvider.tsx";
 import { ProtectedRoutes } from "./components/templates/ProtectedRoutes.tsx";
+import { BookmarksPage } from "./components/pages/BookmarksPage.tsx";
 
 export const Router = (): React.ReactNode => (
     <BrowserRouter basename={"/"}>
@@ -18,6 +19,7 @@ export const Router = (): React.ReactNode => (
                     <Route path="/login" element={<LoginPage />} />
                     <Route element={<ProtectedRoutes />}>
                         <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/bookmarks" element={<BookmarksPage />} />
                     </Route>
                 </Route>
             </Route>
