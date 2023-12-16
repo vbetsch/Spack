@@ -4,6 +4,8 @@ import type { UserDocument } from "../types/documents/UserDocument.ts";
 export enum AuthActionEnum {
     LOGIN = "LOGIN",
     LOGOUT = "LOGOUT",
+    LIKE = "LIKE",
+    UNLIKE = "UNLIKE",
 }
 
 export interface AuthState {
@@ -29,6 +31,31 @@ export const AuthReducer = (
                 ...state,
                 currentUser: undefined,
             };
+        case AuthActionEnum.LIKE:
+            if (state.currentUser != null) {
+                if (state.currentUser.likedPosts == null) {
+                    return {
+                        ...state,
+                        currentUser: {
+                            ...state.currentUser,
+                            likedPosts: [action.payload],
+                        },
+                    };
+                } else {
+                    return {
+                        ...state,
+                        currentUser: {
+                            ...state.currentUser,
+                            likedPosts: [
+                                ...state.currentUser.likedPosts,
+                                action.payload,
+                            ],
+                        },
+                    };
+                }
+            } else {
+                return state;
+            }
         default:
             return state;
     }

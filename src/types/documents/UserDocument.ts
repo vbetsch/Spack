@@ -7,4 +7,5 @@ export interface UserDocument {
     threads: ThreadDocument[];
     comments: PostDocument[];
     bookmarks: BookmarkDocument[];
+    likedPosts: PostDocument[];
 }
