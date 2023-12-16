@@ -3,7 +3,7 @@ import type { UserDocument } from "./UserDocument.ts";
 import type { BookmarkDocument } from "./BookmarkDocument.ts";
 
 export interface PostDocument {
-    uid: string;
+    id: string;
     createdDate: Date;
     modifiedDate: Date;
     content: string;
