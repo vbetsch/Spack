@@ -26,3 +26,9 @@ strong {
 .container {
     padding: 0 30%;
 }
+
+.threads {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

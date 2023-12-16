@@ -7,11 +7,13 @@ import { DatabaseCollectionEnum } from "../../types/DatabaseCollectionEnum.ts";
 import { Thread } from "../Thread.tsx";
 
 export const ThreadsPage = (): React.ReactNode => {
+    const [loading, setLoading] = useState<boolean>(false);
     const [threads, setThreads] = useState<ThreadDocument[] | undefined>(
         undefined,
     );
 
     const getAllThreads = async (): Promise<void> => {
+        setLoading(true);
         const querySnapshot = await getDocs(
             collection(db, DatabaseCollectionEnum.THREADS),
         );
@@ -22,6 +24,7 @@ export const ThreadsPage = (): React.ReactNode => {
         if (threads.length > 0) {
             setThreads(threads);
         }
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -32,6 +35,7 @@ export const ThreadsPage = (): React.ReactNode => {
         <div className="container">
             <Title text={"All posts"} />
             <div className="threads">
+                {loading && "Loading..."}
                 {threads?.map((thread, key) => (
                     <Thread key={key} data={thread} />
                 ))}
