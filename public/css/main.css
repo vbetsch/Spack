@@ -1,6 +1,13 @@
 :root {
-    --border-color: #dae2f3;
-    --blue: #4a69bd;
+    --white: #ffffff;
+    --light-grey: #e6e6e7;
+    --grey: #969696;
+    --light-blueD: #dae2f3;
+    --light-blueB: #b5c4e6;
+    --blue6: #6489cc;
+    --blue4: #4a69bd;
+    --dark-blue: #25355f;
+    --dark: #131b30;
 }
 
 body {
