@@ -7,14 +7,16 @@ import { auth } from "../../database/firebase.ts";
 import { FirebaseError } from "@firebase/util";
 
 export const RegisterPage = (): React.ReactNode => {
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
-    const [passwordError, setPasswordError] = useState<string | null>(null);
+    const [passwordError, setPasswordError] = useState<string | undefined>(
+        undefined,
+    );
     const navigate = useNavigate();
 
     const onSubmit = async (data: FieldValues): Promise<void> => {
-        setPasswordError(null);
-        setError(null);
+        setPasswordError(undefined);
+        setError(undefined);
         if (data.password.length < 8) {
             setPasswordError(
                 "Le mot de passe doit contenir au moins 8 caractères",

@@ -16,8 +16,8 @@ import { Title } from "./Title.tsx";
 
 interface AuthFormProperties {
     title: string;
-    passwordError: string | null;
-    backEndError: string | null;
+    passwordError?: string;
+    backEndError?: string;
     loading: boolean;
     onSubmit: (data: FieldValues) => Promise<void>;
     textButton: string;
@@ -62,7 +62,11 @@ export const AuthForm = ({
                     <FormControl required variant={"standard"}>
                         <InputLabel
                             htmlFor="standard-adornment-password"
-                            style={passwordError ? { color: "red" } : undefined}
+                            style={
+                                passwordError != null
+                                    ? { color: "red" }
+                                    : undefined
+                            }
                         >
                             Password
                         </InputLabel>

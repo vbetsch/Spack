@@ -9,13 +9,13 @@ import { AuthContext } from "../../context/AuthProvider.tsx";
 import { AuthActionEnum } from "../../context/AuthReducer.ts";
 
 export const LoginPage = (): React.ReactNode => {
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const { dispatch } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const onSubmit = async (data: FieldValues): Promise<void> => {
-        setError(null);
+        setError(undefined);
         setLoading(true);
         try {
             const { user } = await signInWithEmailAndPassword(
@@ -65,7 +65,7 @@ export const LoginPage = (): React.ReactNode => {
             <AuthForm
                 title={"Login"}
                 loading={loading}
-                passwordError={null}
+                passwordError={undefined}
                 backEndError={error}
                 onSubmit={onSubmit}
                 textButton={"Login"}
