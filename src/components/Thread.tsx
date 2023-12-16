@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Tag } from "./Tag.tsx";
 import type { ThreadDocument } from "../types/documents/ThreadDocument.ts";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../database/firebase.ts";
 import { DatabaseCollectionEnum } from "../types/DatabaseCollectionEnum.ts";
 import type { PostDocument } from "../types/documents/PostDocument.ts";
@@ -39,12 +39,28 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
         setLoading(false);
     };
 
+    const setNbLikes = async (newValue: number): Promise<void> => {
+        if (post != null) {
+            await setDoc(doc(db, DatabaseCollectionEnum.POSTS, data.post.id), {
+                ...post,
+                nbLikes: newValue,
+            });
+        }
+    };
+
     const toggleLike = (): void => {
+        if (post == null) {
+            return;
+        }
+        setLoading(true);
         if (likeType === faHeartRegular) {
             setLikeType(faHeartSolid);
+            setNbLikes(post.nbLikes + 1).catch(console.error);
         } else {
             setLikeType(faHeartRegular);
+            setNbLikes(post.nbLikes - 1).catch(console.error);
         }
+        setLoading(false);
     };
 
     const toggleSave = (): void => {
@@ -57,7 +73,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
 
     useEffect(() => {
         getPost().catch(console.error);
-    }, []);
+    }, [likeType]);
 
     return (
         <div className="thread">
