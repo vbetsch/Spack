@@ -1,8 +1,8 @@
 import { useContext, useEffect } from "react";
 import type { ReactNode } from "react";
-import { AuthContext } from "../../context/AuthProvider.tsx";
+import { AuthContext } from "../../providers/AuthProvider.tsx";
 import { Navigate, useLocation } from "react-router";
-import { AuthActionEnum } from "../../context/AuthReducer.ts";
+import { AuthActionEnum } from "../../reducers/AuthReducer.ts";
 import { Outlet } from "react-router-dom";
 
 export const ProtectedRoutes = (): ReactNode => {

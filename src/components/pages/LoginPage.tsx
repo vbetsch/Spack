@@ -5,8 +5,8 @@ import { auth } from "../../database/firebase";
 import { FirebaseError } from "@firebase/util";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { AuthForm } from "../AuthForm.tsx";
-import { AuthContext } from "../../context/AuthProvider.tsx";
-import { AuthActionEnum } from "../../context/AuthReducer.ts";
+import { AuthContext } from "../../providers/AuthProvider.tsx";
+import { AuthActionEnum } from "../../reducers/AuthReducer.ts";
 
 export const LoginPage = (): React.ReactNode => {
     const [error, setError] = useState<string | undefined>(undefined);

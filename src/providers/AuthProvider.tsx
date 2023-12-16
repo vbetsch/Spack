@@ -1,7 +1,7 @@
 import React, { createContext, useReducer } from "react";
 import type { Dispatch } from "react";
-import { initialAuthState, AuthReducer } from "./AuthReducer.ts";
-import type { AuthActionEnum, AuthState } from "./AuthReducer.ts";
+import { initialAuthState, AuthReducer } from "../reducers/AuthReducer.ts";
+import type { AuthActionEnum, AuthState } from "../reducers/AuthReducer.ts";
 import type { Action } from "../types/ActionType.ts";
 import { Outlet } from "react-router-dom";
 

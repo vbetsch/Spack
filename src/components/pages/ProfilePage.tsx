@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Title } from "../Title.tsx";
-import { AuthContext } from "../../context/AuthProvider.tsx";
-import { AuthActionEnum } from "../../context/AuthReducer.ts";
+import { AuthContext } from "../../providers/AuthProvider.tsx";
+import { AuthActionEnum } from "../../reducers/AuthReducer.ts";
 import { LoadingButton } from "@mui/lab";
 
 export const ProfilePage = (): React.ReactNode => {
