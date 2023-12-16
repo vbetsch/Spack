@@ -1,12 +1,14 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import type { FieldValues } from "react-hook-form";
-import { auth } from "../../database/firebase";
+import { auth, db } from "../../database/firebase";
 import { FirebaseError } from "@firebase/util";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { AuthForm } from "../AuthForm.tsx";
 import { AuthContext } from "../../providers/AuthProvider.tsx";
 import { AuthActionEnum } from "../../reducers/AuthReducer.ts";
+import { doc, getDoc } from "firebase/firestore";
+import { DatabaseCollectionEnum } from "../../types/DatabaseCollectionEnum.ts";
 
 export const LoginPage = (): React.ReactNode => {
     const [error, setError] = useState<string | undefined>(undefined);
@@ -23,11 +25,14 @@ export const LoginPage = (): React.ReactNode => {
                 data.email,
                 data.password,
             );
+            localStorage.setItem("@user", JSON.stringify(user));
+            const userSnap = await getDoc(
+                doc(db, DatabaseCollectionEnum.USERS, user.uid),
+            );
             dispatch({
                 type: AuthActionEnum.LOGIN,
-                payload: user,
+                payload: userSnap.data(),
             });
-            localStorage.setItem("@user", JSON.stringify(user));
             setLoading(false);
             navigate("/profile");
         } catch (error: unknown) {

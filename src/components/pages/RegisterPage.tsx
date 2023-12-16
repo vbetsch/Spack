@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { AuthForm } from "../AuthForm.tsx";
-import type { FieldValues } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../database/firebase.ts";
+import { auth, db } from "../../database/firebase.ts";
 import { FirebaseError } from "@firebase/util";
+import { doc, setDoc } from "firebase/firestore";
+import type { UserCredentialsDto } from "../../types/dto/UserCredentialsDto.ts";
+import { DatabaseCollectionEnum } from "../../types/DatabaseCollectionEnum.ts";
 
 export const RegisterPage = (): React.ReactNode => {
     const [error, setError] = useState<string | undefined>(undefined);
@@ -14,7 +16,7 @@ export const RegisterPage = (): React.ReactNode => {
     );
     const navigate = useNavigate();
 
-    const onSubmit = async (data: FieldValues): Promise<void> => {
+    const onSubmit = async (data: UserCredentialsDto): Promise<void> => {
         setPasswordError(undefined);
         setError(undefined);
         if (data.password.length < 8) {
@@ -24,10 +26,14 @@ export const RegisterPage = (): React.ReactNode => {
         } else {
             setLoading(true);
             try {
-                await createUserWithEmailAndPassword(
+                const { user } = await createUserWithEmailAndPassword(
                     auth,
                     data.email,
                     data.password,
+                );
+                await setDoc(
+                    doc(db, DatabaseCollectionEnum.USERS, user.uid),
+                    {},
                 );
                 setLoading(false);
                 navigate("/login");

@@ -1,5 +1,5 @@
-import type { AuthUser } from "../types/AuthUserType.ts";
 import type { Action } from "../types/ActionType";
+import type { UserDocument } from "../types/documents/UserDocument.ts";
 
 export enum AuthActionEnum {
     LOGIN = "LOGIN",
@@ -7,7 +7,7 @@ export enum AuthActionEnum {
 }
 
 export interface AuthState {
-    currentUser: AuthUser | undefined;
+    currentUser: UserDocument | undefined;
 }
 
 export const initialAuthState: AuthState = {
