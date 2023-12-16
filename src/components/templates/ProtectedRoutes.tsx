@@ -1,4 +1,5 @@
-import { ReactNode, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
+import type { ReactNode } from "react";
 import { AuthContext } from "../../context/AuthProvider.tsx";
 import { Navigate, useLocation } from "react-router";
 import { AuthActionEnum } from "../../context/AuthReducer.ts";
@@ -10,17 +11,19 @@ export const ProtectedRoutes = (): ReactNode => {
     const user = localStorage.getItem("@user");
 
     useEffect(() => {
-        if (user) {
+        if (user != null) {
             dispatch({ type: AuthActionEnum.LOGIN, payload: JSON.parse(user) });
         }
     }, [user]);
 
-    if (!user) {
+    if (user == null) {
         console.warn(
             "You must be logged in to view this page. Redirection to the login page...",
         );
+        // eslint-disable-next-line react/react-in-jsx-scope
         return <Navigate to="/login" state={{ from: location.pathname }} />;
     }
 
+    // eslint-disable-next-line react/react-in-jsx-scope
     return <Outlet />;
 };

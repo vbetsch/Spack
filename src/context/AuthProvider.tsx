@@ -1,11 +1,8 @@
-import React, { createContext, Dispatch, useReducer } from "react";
-import {
-    AuthActionEnum,
-    AuthState,
-    initialAuthState,
-    AuthReducer,
-} from "./AuthReducer.ts";
-import { Action } from "../types/ActionType.ts";
+import React, { createContext, useReducer } from "react";
+import type { Dispatch } from "react";
+import { initialAuthState, AuthReducer } from "./AuthReducer.ts";
+import type { AuthActionEnum, AuthState } from "./AuthReducer.ts";
+import type { Action } from "../types/ActionType.ts";
 import { Outlet } from "react-router-dom";
 
 const defaultValueType = {

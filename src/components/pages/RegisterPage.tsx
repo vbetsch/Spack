@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AuthForm } from "../AuthForm.tsx";
-import { FieldValues } from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../database/firebase.ts";
@@ -40,7 +40,9 @@ export const RegisterPage = (): React.ReactNode => {
                             setError("Le format de l'email est invalide");
                             break;
                         case "auth/email-already-in-use":
-                            setError("L'email est déjà utilisé pour un autre compte");
+                            setError(
+                                "L'email est déjà utilisé pour un autre compte",
+                            );
                             break;
                         case "auth/too-many-requests":
                             setError(

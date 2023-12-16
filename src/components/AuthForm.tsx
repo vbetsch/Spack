@@ -10,7 +10,8 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
 import { Title } from "./Title.tsx";
 
 interface AuthFormProperties {
@@ -97,7 +98,7 @@ export const AuthForm = ({
                     loading={loading}
                     loadingIndicator="Loading…"
                     variant="contained"
-                    onClick={handleSubmit(onSubmit)}
+                    onClick={() => handleSubmit(onSubmit)}
                 >
                     <span>{textButton}</span>
                 </LoadingButton>

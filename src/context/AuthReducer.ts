@@ -1,5 +1,5 @@
-import { User } from "../types/UserType.ts";
-import { Action } from "../types/ActionType";
+import type { AuthUser } from "../types/AuthUserType.ts";
+import type { Action } from "../types/ActionType";
 
 export enum AuthActionEnum {
     LOGIN = "LOGIN",
@@ -7,7 +7,7 @@ export enum AuthActionEnum {
 }
 
 export interface AuthState {
-    currentUser: User | undefined;
+    currentUser: AuthUser | undefined;
 }
 
 export const initialAuthState: AuthState = {
@@ -17,7 +17,7 @@ export const initialAuthState: AuthState = {
 export const AuthReducer = (
     state: AuthState,
     action: Action<AuthActionEnum>,
-) => {
+): AuthState => {
     switch (action.type) {
         case AuthActionEnum.LOGIN:
             return {
