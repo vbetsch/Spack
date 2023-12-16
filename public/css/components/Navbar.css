@@ -3,7 +3,7 @@
     justify-content: space-around;
     align-items: center;
     height: 6%;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--light-blueD);
     /*position: fixed;*/
 }
 
@@ -23,7 +23,7 @@
 #navbar .right-part .links {
     font-family: "JetBrains Mono", sans-serif;
     text-decoration: none;
-    color: var(--blue);
+    color: var(--blue4);
     user-select: none;
 }
 #navbar .right-part .links:hover {

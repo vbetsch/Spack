@@ -1,0 +1,9 @@
+.tag {
+    font-family: "JetBrains Mono", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    background-color: var(--light-blueD);
+    color: var(--blue4);
+    padding: 2px 7px;
+    border-radius: 5px;
+}
