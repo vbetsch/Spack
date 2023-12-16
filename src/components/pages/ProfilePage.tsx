@@ -27,6 +27,9 @@ export const ProfilePage = (): React.ReactNode => {
         <div className="container">
             <Title text={"Profile"} />
             <p>
+                <strong>UID</strong> : {state.currentUser?.uid}
+            </p>
+            <p>
                 <strong>Créé le</strong> : {createdDate.toLocaleString(lang)}
             </p>
             <p>

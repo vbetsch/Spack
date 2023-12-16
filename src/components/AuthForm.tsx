@@ -72,7 +72,7 @@ export const AuthForm = ({
                             Password
                         </InputLabel>
                         <Input
-                            error={passwordError !== null}
+                            error={passwordError != null}
                             id="standard-adornment-password"
                             type={showPassword ? "text" : "password"}
                             {...register("password", { required: true })}
@@ -103,7 +103,7 @@ export const AuthForm = ({
                     loading={loading}
                     loadingIndicator="Loading…"
                     variant="contained"
-                    onClick={() => handleSubmit(onSubmit)}
+                    onClick={handleSubmit(onSubmit)}
                 >
                     <span>{textButton}</span>
                 </LoadingButton>
