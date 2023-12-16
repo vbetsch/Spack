@@ -6,7 +6,14 @@ import { db } from "../database/firebase.ts";
 import { DatabaseCollectionEnum } from "../types/DatabaseCollectionEnum.ts";
 import type { PostDocument } from "../types/documents/PostDocument.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faHeart } from "@fortawesome/free-regular-svg-icons";
+import {
+    faBookmark as faBookmarkRegular,
+    faHeart as faHeartRegular,
+} from "@fortawesome/free-regular-svg-icons";
+import {
+    faBookmark as faBookmarkSolid,
+    faHeart as faHeartSolid,
+} from "@fortawesome/free-solid-svg-icons";
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 interface ThreadProperties {
@@ -16,6 +23,9 @@ interface ThreadProperties {
 export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
     const [post, setPost] = useState<PostDocument | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
+    const [likeType, setLikeType] = useState<IconProp>(faHeartRegular);
+    const [bookmarkType, setBookmarkType] =
+        useState<IconProp>(faBookmarkRegular);
 
     const getPost = async (): Promise<void> => {
         setLoading(true);
@@ -29,6 +39,22 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
         setLoading(false);
     };
 
+    const toggleLike = (): void => {
+        if (likeType === faHeartRegular) {
+            setLikeType(faHeartSolid);
+        } else {
+            setLikeType(faHeartRegular);
+        }
+    };
+
+    const toggleSave = (): void => {
+        if (bookmarkType === faBookmarkRegular) {
+            setBookmarkType(faBookmarkSolid);
+        } else {
+            setBookmarkType(faBookmarkRegular);
+        }
+    };
+
     useEffect(() => {
         getPost().catch(console.error);
     }, []);
@@ -36,20 +62,20 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
     return (
         <div className="thread">
             <div className="thread-left">
-                <div className="counter">
+                <div onClick={toggleLike} className="counter">
                     <span className="text">
                         <span>{post?.nbLikes != null ? post.nbLikes : 0}</span>
                     </span>
                     <div className="icon">
-                        <FontAwesomeIcon icon={faHeart as IconProp} />
+                        <FontAwesomeIcon icon={likeType} />
                     </div>
                 </div>
-                <div className="counter">
+                <div onClick={toggleSave} className="counter">
                     <span className="text">
                         {post?.bookmarks != null ? post.bookmarks.length : 0}
                     </span>
                     <div className="icon">
-                        <FontAwesomeIcon icon={faBookmark as IconProp} />
+                        <FontAwesomeIcon icon={bookmarkType} />
                     </div>
                 </div>
             </div>
