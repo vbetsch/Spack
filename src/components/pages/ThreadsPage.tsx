@@ -28,7 +28,9 @@ export const ThreadsPage = (): React.ReactNode => {
     };
 
     useEffect(() => {
-        getAllThreads().catch(console.error);
+        getAllThreads().catch((e) => {
+            console.error(e);
+        });
     }, []);
 
     return (

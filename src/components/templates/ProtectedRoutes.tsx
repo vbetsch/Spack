@@ -28,7 +28,9 @@ export const ProtectedRoutes = (): ReactNode => {
     };
 
     useEffect(() => {
-        getUser().catch(console.error);
+        getUser().catch((e) => {
+            console.error(e);
+        });
     }, [user]);
 
     if (user == null) {
