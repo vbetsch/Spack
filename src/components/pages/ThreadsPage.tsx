@@ -19,7 +19,7 @@ export const ThreadsPage = (): React.ReactNode => {
         );
         const threads: ThreadDocument[] = [];
         querySnapshot.forEach((doc) => {
-            threads.push(doc.data() as ThreadDocument);
+            threads.push({ id: doc.id, ...doc.data() } as ThreadDocument);
         });
         if (threads.length > 0) {
             setThreads(threads);
