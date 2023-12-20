@@ -22,7 +22,10 @@ export const ProtectedRoutes = (): ReactNode => {
             );
             dispatch({
                 type: AuthActionEnum.LOGIN,
-                payload: userSnap.data(),
+                payload: {
+                    id: userSnap.id,
+                    ...userSnap.data(),
+                },
             });
         }
     };

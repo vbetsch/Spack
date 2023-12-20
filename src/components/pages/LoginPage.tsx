@@ -31,7 +31,10 @@ export const LoginPage = (): React.ReactNode => {
             );
             dispatch({
                 type: AuthActionEnum.LOGIN,
-                payload: userSnap.data(),
+                payload: {
+                    id: userSnap.id,
+                    ...userSnap.data(),
+                },
             });
             setLoading(false);
             navigate("/profile");
