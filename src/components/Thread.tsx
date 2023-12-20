@@ -1,24 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Tag } from "./Tag.tsx";
 import type { ThreadDocument } from "../types/documents/ThreadDocument.ts";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../database/firebase.ts";
-import { DatabaseCollectionEnum } from "../types/DatabaseCollectionEnum.ts";
 import type { PostDocument } from "../types/documents/PostDocument.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faBookmark as faBookmarkRegular,
-    faHeart as faHeartRegular,
+    faBookmark as faBookmarkDefault,
+    faHeart as faHeartDefault,
 } from "@fortawesome/free-regular-svg-icons";
 import {
-    faBookmark as faBookmarkSolid,
-    faHeart as faHeartSolid,
+    faBookmark as faBookmarkEnable,
+    faHeart as faHeartEnable,
 } from "@fortawesome/free-solid-svg-icons";
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { AuthContext } from "../providers/AuthProvider.tsx";
-import { AuthActionEnum } from "../reducers/AuthReducer.ts";
 import { useNavigate } from "react-router";
-import type { AuthUser } from "../types/AuthUserType.ts";
+import { getPost, setNbLikes } from "../database/queries/PostQueries.ts";
+import { AuthUser } from "../types/AuthUserType.ts";
+import {
+    addLikedPost,
+    removeLikedPost,
+} from "../database/queries/UserQueries.ts";
+import { AuthActionEnum } from "../reducers/AuthReducer.ts";
 
 interface ThreadProperties {
     data: ThreadDocument;
@@ -28,118 +30,117 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
     const userData = localStorage.getItem("@user");
     const { state, dispatch } = useContext(AuthContext);
     const [post, setPost] = useState<PostDocument | undefined>(undefined);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [likeType, setLikeType] = useState<IconProp>(faHeartRegular);
-    const [bookmarkType, setBookmarkType] =
-        useState<IconProp>(faBookmarkRegular);
+    const [loadingContent, setLoadingContent] = useState<boolean>(false);
+    const [loadingCounters, setLoadingCounters] = useState<boolean>(false);
+    const [likeType, setLikeType] = useState<IconProp>(faHeartDefault);
+    const [bookmarkType] = useState<IconProp>(faBookmarkDefault);
     const navigate = useNavigate();
 
-    const getPost = async (): Promise<void> => {
-        setLoading(true);
-        const postSnap = await getDoc(
-            doc(db, DatabaseCollectionEnum.POSTS, data.post.id),
-        );
-        const postData = postSnap.data() as PostDocument;
-        if (postData != null) {
-            setPost(postData);
-        }
-        setLoading(false);
-    };
+    let user: AuthUser | undefined;
+    if (userData != null) {
+        user = JSON.parse(userData);
+    }
 
-    const setNbLikes = async (newValue: number): Promise<void> => {
-        if (post != null) {
-            await setDoc(doc(db, DatabaseCollectionEnum.POSTS, data.post.id), {
-                ...post,
-                nbLikes: newValue,
-            });
-        }
-        if (state.currentUser != null) {
-            if (userData != null) {
-                const user: AuthUser = JSON.parse(userData);
-                if (state.currentUser.likedPosts == null) {
-                    await setDoc(
-                        doc(
-                            db,
-                            DatabaseCollectionEnum.USERS,
-                            user.uid.toString(),
-                        ),
-                        {
-                            ...state.currentUser,
-                            likedPosts: [post],
-                        },
-                    );
-                } else {
-                    await setDoc(
-                        doc(
-                            db,
-                            DatabaseCollectionEnum.USERS,
-                            user.uid.toString(),
-                        ),
-                        {
-                            ...state.currentUser,
-                            likedPosts: [...state.currentUser.likedPosts, post],
-                        },
-                    );
-                }
+    // Toggle actions
+
+    const toggleAction = (
+        enableTrigger: boolean,
+        toggleAction: (action: boolean) => void,
+    ): void => {
+        if (state.currentUser == null) {
+            navigate("/login");
+        } else {
+            if (enableTrigger) {
+                toggleAction(true);
+            } else {
+                toggleAction(false);
             }
         }
     };
 
     const toggleLike = (): void => {
-        if (state.currentUser == null) {
-            navigate("/login");
-        } else {
-            if (post == null) {
-                return;
-            }
-            setLoading(true);
-            if (likeType === faHeartRegular) {
-                setLikeType(faHeartSolid);
-                setNbLikes(post.nbLikes + 1).catch(console.error);
-                dispatch({
-                    type: AuthActionEnum.LIKE,
-                    payload: post,
-                });
-            } else {
-                setLikeType(faHeartRegular);
-                setNbLikes(post.nbLikes - 1).catch(console.error);
-            }
-            setLoading(false);
-        }
+        toggleAction(likeType === faHeartDefault, likeOrUnlikepost);
     };
 
     const toggleSave = (): void => {
-        if (state.currentUser == null) {
-            navigate("/login");
+        toggleAction(bookmarkType === faBookmarkDefault, saveOrUnsavepost);
+    };
+
+    // Actions
+
+    const likeOrUnlikepost = (like: boolean) => {
+        const icon = like ? faHeartEnable : faHeartDefault;
+        const likeValue = like ? 1 : -1;
+        const actionToLikedPosts = like ? addLikedPost : removeLikedPost;
+
+        setLikeType(icon);
+        if (!post) {
+            console.warn("The post is not yet loaded");
         } else {
-            if (bookmarkType === faBookmarkRegular) {
-                setBookmarkType(faBookmarkSolid);
+            if (!user) {
+                console.warn("You are not login");
             } else {
-                setBookmarkType(faBookmarkRegular);
+                setLoadingCounters(true);
+                setNbLikes(data, post, likeValue).catch((e) => {
+                    console.error(e);
+                });
+                actionToLikedPosts(
+                    user.uid.toString(),
+                    state.currentUser,
+                    post.id.toString(),
+                )
+                    .then(() => {
+                        dispatch({
+                            type: AuthActionEnum.LIKE,
+                            payload: post.id.toString(),
+                        });
+                    })
+                    .catch((e) => {
+                        console.error(e);
+                    });
+                setLoadingCounters(false);
             }
         }
     };
 
+    const saveOrUnsavepost = (save: boolean) => {
+        // TODO: saveOrUnsavepost
+        const icon = save ? faBookmarkEnable : faBookmarkDefault;
+
+        setLikeType(icon);
+        console.log("saveOrUnsavepost");
+    };
+
     useEffect(() => {
-        getPost()
-            .finally(() => {
-                if (post != null && state.currentUser?.likedPosts != null) {
-                    state.currentUser.likedPosts.forEach((postDoc) => {
-                        if (postDoc.id === post.id) {
-                            setLikeType(faHeartSolid);
-                        }
-                    });
+        getPost(data)
+            .then((post) => {
+                setLoadingContent(true);
+                setLoadingCounters(true);
+                if (post) {
+                    setPost(post);
                 }
             })
-            .catch(console.error);
-    }, [likeType, bookmarkType]);
+            .finally(() => {
+                setLoadingContent(false);
+                setLoadingCounters(false);
+            })
+            .catch((e) => {
+                console.error(e);
+            });
+    }, [likeType]);
 
     return (
         <div className="thread">
             <div className="thread-left">
                 <div onClick={toggleLike} className="counter">
                     <span className="text">
-                        <span>{post?.nbLikes != null ? post.nbLikes : 0}</span>
+                        <span>
+                            {loadingCounters
+                                ? "--"
+                                : post?.nbLikes != null
+                                  ? post.nbLikes
+                                  : 0}
+                        </span>
                     </span>
                     <div className="icon">
                         <FontAwesomeIcon icon={likeType} />
@@ -147,7 +148,11 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
                 </div>
                 <div onClick={toggleSave} className="counter">
                     <span className="text">
-                        {post?.bookmarks != null ? post.bookmarks.length : 0}
+                        {loadingCounters
+                            ? "--"
+                            : post?.bookmarks != null
+                              ? post.bookmarks.length
+                              : 0}
                     </span>
                     <div className="icon">
                         <FontAwesomeIcon icon={bookmarkType} />
@@ -157,7 +162,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
             <div className="thread-right">
                 <span className="title">{data.title}</span>
                 <p className="content">
-                    {loading && "Loading..."}
+                    {loadingContent && "Loading..."}
                     {post?.content}
                 </p>
                 <div className="tags">

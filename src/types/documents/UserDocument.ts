@@ -3,9 +3,8 @@ import type { PostDocument } from "./PostDocument.ts";
 import type { BookmarkDocument } from "./BookmarkDocument.ts";
 
 export interface UserDocument {
-    id: string;
     threads: ThreadDocument[];
     comments: PostDocument[];
     bookmarks: BookmarkDocument[];
-    likedPosts: PostDocument[];
+    likedPosts: string[];
 }
