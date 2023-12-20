@@ -72,6 +72,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
         const icon = like ? faHeartEnable : faHeartDefault;
         const likeValue = like ? 1 : -1;
         const actionToLikedPosts = like ? addLikedPost : removeLikedPost;
+        const authAction = like ? AuthActionEnum.LIKE : AuthActionEnum.UNLIKE;
 
         setLikeType(icon);
         if (!post) {
@@ -91,7 +92,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
                 )
                     .then(() => {
                         dispatch({
-                            type: AuthActionEnum.LIKE,
+                            type: authAction,
                             payload: post.id.toString(),
                         });
                     })
