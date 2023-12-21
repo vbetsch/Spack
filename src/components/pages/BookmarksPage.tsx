@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import type { BookmarkDocument } from "../../types/documents/BookmarkDocument.ts";
-import { AuthContext } from "../../providers/AuthProvider.tsx";
+import { UserContext } from "../../providers/UserProvider.tsx";
 import { Title } from "../Title.tsx";
 
 export const BookmarksPage = (): React.ReactNode => {
-    const { state } = useContext(AuthContext);
+    const { state } = useContext(UserContext);
     const [bookmarks, setBookmarks] = useState<BookmarkDocument[]>([]);
 
     useEffect(() => {

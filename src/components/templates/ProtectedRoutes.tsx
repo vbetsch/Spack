@@ -1,15 +1,15 @@
 import { useContext, useEffect } from "react";
 import type { ReactNode } from "react";
-import { AuthContext } from "../../providers/AuthProvider.tsx";
+import { UserContext } from "../../providers/UserProvider.tsx";
 import { Navigate, useLocation } from "react-router";
 import { Outlet } from "react-router-dom";
 import { getUser } from "../../database/queries/UserQueries.ts";
 import { UserDocument } from "../../types/documents/UserDocument.ts";
-import { AuthActionEnum } from "../../reducers/AuthReducer.ts";
+import { UserActionEnum } from "../../reducers/UserReducer.ts";
 
 export const ProtectedRoutes = (): ReactNode => {
     const user = localStorage.getItem("@user");
-    const { state, dispatch } = useContext(AuthContext);
+    const { state, dispatch } = useContext(UserContext);
     const location = useLocation();
 
     useEffect(() => {
@@ -19,7 +19,7 @@ export const ProtectedRoutes = (): ReactNode => {
                     return;
                 }
                 dispatch({
-                    type: AuthActionEnum.LOGIN,
+                    type: UserActionEnum.LOGIN,
                     payload: {
                         id: snap.id,
                         ...snap.data(),

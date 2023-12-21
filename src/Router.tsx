@@ -5,14 +5,14 @@ import { ThreadsPage } from "./components/pages/ThreadsPage.tsx";
 import { RegisterPage } from "./components/pages/RegisterPage.tsx";
 import { LoginPage } from "./components/pages/LoginPage.tsx";
 import { ProfilePage } from "./components/pages/ProfilePage.tsx";
-import { AuthProvider } from "./providers/AuthProvider.tsx";
+import { UserProvider } from "./providers/UserProvider.tsx";
 import { ProtectedRoutes } from "./components/templates/ProtectedRoutes.tsx";
 import { BookmarksPage } from "./components/pages/BookmarksPage.tsx";
 
 export const Router = (): React.ReactNode => (
     <BrowserRouter basename={"/"}>
         <Routes>
-            <Route element={<AuthProvider />}>
+            <Route element={<UserProvider />}>
                 <Route element={<NavbarPage />}>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />

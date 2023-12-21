@@ -1,37 +1,37 @@
 import type { Action } from "../types/ActionType";
 import type { UserDocument } from "../types/documents/UserDocument.ts";
 
-export enum AuthActionEnum {
+export enum UserActionEnum {
     LOGIN = "LOGIN",
     LOGOUT = "LOGOUT",
     LIKE = "LIKE",
     UNLIKE = "UNLIKE",
 }
 
-export interface AuthState {
+export interface UserState {
     currentUser: UserDocument | undefined;
 }
 
-export const initialAuthState: AuthState = {
+export const initialUserState: UserState = {
     currentUser: undefined,
 };
 
-export const AuthReducer = (
-    state: AuthState,
-    action: Action<AuthActionEnum>,
-): AuthState => {
+export const UserReducer = (
+    state: UserState,
+    action: Action<UserActionEnum>,
+): UserState => {
     switch (action.type) {
-        case AuthActionEnum.LOGIN:
+        case UserActionEnum.LOGIN:
             return {
                 ...state,
                 currentUser: action.payload as UserDocument | undefined,
             };
-        case AuthActionEnum.LOGOUT:
+        case UserActionEnum.LOGOUT:
             return {
                 ...state,
                 currentUser: undefined,
             };
-        case AuthActionEnum.LIKE:
+        case UserActionEnum.LIKE:
             if (state.currentUser == null) {
                 console.warn("Can't save likes : no connected user found");
                 return state;
@@ -56,7 +56,7 @@ export const AuthReducer = (
                     },
                 };
             }
-        case AuthActionEnum.UNLIKE:
+        case UserActionEnum.UNLIKE:
             if (state.currentUser == null) {
                 console.warn("Can't save likes : no connected user found");
                 return state;

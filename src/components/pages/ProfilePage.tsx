@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Title } from "../Title.tsx";
-import { AuthContext } from "../../providers/AuthProvider.tsx";
-import { AuthActionEnum } from "../../reducers/AuthReducer.ts";
+import { UserContext } from "../../providers/UserProvider.tsx";
+import { UserActionEnum } from "../../reducers/UserReducer.ts";
 import { LoadingButton } from "@mui/lab";
 import type { PostDocument } from "../../types/documents/PostDocument.ts";
 import type { AuthUser } from "../../types/AuthUserType.ts";
@@ -10,13 +10,13 @@ export const ProfilePage = (): React.ReactNode => {
     const lang = "fr";
     const userData = localStorage.getItem("@user");
     const [user, setUser] = useState<AuthUser | undefined>(undefined);
-    const { state, dispatch } = useContext(AuthContext);
+    const { state, dispatch } = useContext(UserContext);
     const [comments, setComments] = useState<PostDocument[]>([]);
 
     const logOut = (): void => {
         localStorage.removeItem("@user");
         dispatch({
-            type: AuthActionEnum.LOGOUT,
+            type: UserActionEnum.LOGOUT,
             payload: undefined,
         });
     };

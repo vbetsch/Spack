@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../providers/AuthProvider.tsx";
+import { UserContext } from "../providers/UserProvider.tsx";
 
 export const Navbar = (): React.ReactNode => {
-    const { state } = useContext(AuthContext);
+    const { state } = useContext(UserContext);
 
     return (
         <div id="navbar">

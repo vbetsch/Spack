@@ -3,14 +3,14 @@ import { useNavigate } from "react-router";
 import type { FieldValues } from "react-hook-form";
 import { FirebaseError } from "@firebase/util";
 import { AuthForm } from "../AuthForm.tsx";
-import { AuthContext } from "../../providers/AuthProvider.tsx";
-import { AuthActionEnum } from "../../reducers/AuthReducer.ts";
+import { UserContext } from "../../providers/UserProvider.tsx";
+import { UserActionEnum } from "../../reducers/UserReducer.ts";
 import { signIn } from "../../database/queries/UserQueries.ts";
 
 export const LoginPage = (): React.ReactNode => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
-    const { dispatch } = useContext(AuthContext);
+    const { dispatch } = useContext(UserContext);
     const navigate = useNavigate();
 
     const onSubmit = (data: FieldValues) => {
@@ -22,7 +22,7 @@ export const LoginPage = (): React.ReactNode => {
                     return;
                 }
                 dispatch({
-                    type: AuthActionEnum.LOGIN,
+                    type: UserActionEnum.LOGIN,
                     payload: {
                         id: snap.id,
                         ...snap.data(),

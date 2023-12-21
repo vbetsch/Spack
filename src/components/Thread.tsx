@@ -12,7 +12,7 @@ import {
     faHeart as faHeartEnable,
 } from "@fortawesome/free-solid-svg-icons";
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { AuthContext } from "../providers/AuthProvider.tsx";
+import { UserContext } from "../providers/UserProvider.tsx";
 import { useNavigate } from "react-router";
 import { getPost, setNbLikes } from "../database/queries/PostQueries.ts";
 import { AuthUser } from "../types/AuthUserType.ts";
@@ -20,7 +20,7 @@ import {
     addLikedPost,
     removeLikedPost,
 } from "../database/queries/UserQueries.ts";
-import { AuthActionEnum } from "../reducers/AuthReducer.ts";
+import { UserActionEnum } from "../reducers/UserReducer.ts";
 
 interface ThreadProperties {
     data: ThreadDocument;
@@ -28,7 +28,7 @@ interface ThreadProperties {
 
 export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
     const userData = localStorage.getItem("@user");
-    const { state, dispatch } = useContext(AuthContext);
+    const { state, dispatch } = useContext(UserContext);
     const [post, setPost] = useState<PostDocument | undefined>(undefined);
     const [loadingContent, setLoadingContent] = useState<boolean>(false);
     const [loadingCounters, setLoadingCounters] = useState<boolean>(false);
@@ -72,7 +72,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
         const icon = like ? faHeartEnable : faHeartDefault;
         const likeValue = like ? 1 : -1;
         const actionToLikedPosts = like ? addLikedPost : removeLikedPost;
-        const authAction = like ? AuthActionEnum.LIKE : AuthActionEnum.UNLIKE;
+        const authAction = like ? UserActionEnum.LIKE : UserActionEnum.UNLIKE;
 
         setLikeType(icon);
 
