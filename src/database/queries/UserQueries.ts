@@ -121,3 +121,6 @@ export const removeLikedPost = async (
         console.error(e);
     }
 };
+
+export const addUserBookmark = () => {};
+export const removeUserBookmark = () => {};

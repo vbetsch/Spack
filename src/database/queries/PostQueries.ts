@@ -37,3 +37,6 @@ export const setNbLikes = async (
         console.error(e);
     }
 };
+
+export const addPostBookmark = () => {}
+export const removePostBookmark = () => {}

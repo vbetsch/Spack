@@ -15,31 +15,31 @@ import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { UserContext } from "../providers/UserProvider.tsx";
 import { useNavigate } from "react-router";
 import { getPost, setNbLikes } from "../database/queries/PostQueries.ts";
-import { AuthUser } from "../types/AuthUserType.ts";
 import {
     addLikedPost,
     removeLikedPost,
 } from "../database/queries/UserQueries.ts";
 import { UserActionEnum } from "../reducers/UserReducer.ts";
+import {
+    createAndGetBookmark,
+    deleteBookmark,
+    searchBookmark,
+} from "../database/queries/BookmarkQueries.ts";
 
 interface ThreadProperties {
     data: ThreadDocument;
 }
 
 export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
-    const userData = localStorage.getItem("@user");
     const { state, dispatch } = useContext(UserContext);
     const [post, setPost] = useState<PostDocument | undefined>(undefined);
     const [loadingContent, setLoadingContent] = useState<boolean>(false);
     const [loadingCounters, setLoadingCounters] = useState<boolean>(false);
     const [likeType, setLikeType] = useState<IconProp>(faHeartDefault);
-    const [bookmarkType] = useState<IconProp>(faBookmarkDefault);
+    const [bookmarkType, setBookmarkType] =
+        useState<IconProp>(faBookmarkDefault);
+    const [bookmarkId, setBookmarkId] = useState<string | undefined>(undefined);
     const navigate = useNavigate();
-
-    let user: AuthUser | undefined;
-    if (userData != null) {
-        user = JSON.parse(userData);
-    }
 
     // Toggle actions
 
@@ -74,25 +74,27 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
         const actionToLikedPosts = like ? addLikedPost : removeLikedPost;
         const authAction = like ? UserActionEnum.LIKE : UserActionEnum.UNLIKE;
 
-        setLikeType(icon);
-
         if (!post) {
             console.warn("The post is not yet loaded");
             return;
         }
-        if (!user) {
+        if (!state.currentUser) {
             console.warn("You are not login");
             return;
         }
 
         setLoadingCounters(true);
 
-        setNbLikes(data, post, likeValue).catch((e) => {
-            console.error(e);
-        });
+        setNbLikes(data, post, likeValue)
+            .catch((e) => {
+                console.error(e);
+            })
+            .finally(() => {
+                setLoadingCounters(false);
+            });
 
         actionToLikedPosts(
-            user.uid.toString(),
+            state.currentUser.id,
             state.currentUser,
             post.id.toString(),
         )
@@ -104,18 +106,74 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
             })
             .catch((e) => {
                 console.error(e);
+            })
+            .finally(() => {
+                setLikeType(icon);
             });
-
-        setLoadingCounters(false);
     };
 
     const saveOrUnsavepost = (save: boolean) => {
-        // TODO: saveOrUnsavepost
         const icon = save ? faBookmarkEnable : faBookmarkDefault;
+        // const actionToUserBookmarks = save
+        //     ? addUserBookmark
+        //     : removeUserBookmark;
+        // const actionToPostBookmarks = save
+        //     ? addPostBookmark
+        //     : removePostBookmark;
 
-        setLikeType(icon);
-        console.log("saveOrUnsavepost");
+        if (!post) {
+            console.warn("The post is not yet loaded");
+            return;
+        }
+        if (!state.currentUser) {
+            console.warn("You are not login");
+            return;
+        }
+
+        if (save) {
+            createAndGetBookmark({
+                postId: post.id,
+                userId: state.currentUser.id,
+            }).catch((e) => {
+                console.error(e);
+            });
+        } else {
+            if (!bookmarkId) {
+                console.warn("Bookmark not found");
+                return;
+            }
+            deleteBookmark({
+                id: bookmarkId,
+                postId: post.id,
+                userId: state.currentUser.id,
+            }).catch((e) => {
+                console.error(e);
+            });
+        }
+
+        setBookmarkType(icon);
     };
+
+    useEffect(() => {
+        if (post && state.currentUser) {
+            searchBookmark(post.id, state.currentUser.id)
+                .then((data) => {
+                    if (!data) {
+                        return;
+                    }
+                    console.log(
+                        "(21/12/2023 23:10)  @reyks  [Thread.tsx:194 -  - ]  post  ",
+                        post.nbLikes,
+                        "data.id",
+                        data.id,
+                    );
+                    setBookmarkId(data.id);
+                })
+                .catch((e) => {
+                    console.error(e);
+                });
+        }
+    }, []);
 
     useEffect(() => {
         setLoadingContent(true);
@@ -125,11 +183,19 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
                 if (!post) {
                     return;
                 }
+
                 setPost(post);
+
                 if (state.currentUser?.likedPosts.includes(post.id)) {
                     setLikeType(faHeartEnable);
                 } else {
                     setLikeType(faHeartDefault);
+                }
+
+                if (bookmarkId) {
+                    setBookmarkType(faBookmarkEnable);
+                } else {
+                    setBookmarkType(faBookmarkDefault);
                 }
             })
             .catch((e) => {
@@ -139,7 +205,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
                 setLoadingContent(false);
                 setLoadingCounters(false);
             });
-    }, [likeType]);
+    }, []);
 
     return (
         <div className="thread">
