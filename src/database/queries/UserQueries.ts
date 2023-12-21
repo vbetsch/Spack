@@ -1,8 +1,22 @@
 import { DatabaseCollectionEnum } from "../../types/DatabaseCollectionEnum.ts";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../firebase.ts";
-import { UserDocument } from "../../types/documents/UserDocument.ts";
-import { AuthUser } from "../../types/AuthUserType.ts";
+import { auth, db } from "../firebase.ts";
+import type { UserDocument } from "../../types/documents/UserDocument.ts";
+import type { AuthUser } from "../../types/AuthUserType.ts";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+} from "firebase/auth";
+import { FieldValues } from "react-hook-form";
+
+export const setUser = async (data: AuthUser) => {
+    try {
+        localStorage.setItem("@user", JSON.stringify(data));
+        return await getDoc(doc(db, DatabaseCollectionEnum.USERS, data.uid));
+    } catch (e) {
+        console.error(e);
+    }
+};
 
 export const getUser = async () => {
     const user = localStorage.getItem("@user");
@@ -15,6 +29,32 @@ export const getUser = async () => {
         } catch (e) {
             console.error(e);
         }
+    }
+};
+
+export const signIn = async (data: FieldValues) => {
+    try {
+        const userCredential = await signInWithEmailAndPassword(
+            auth,
+            data.email,
+            data.password,
+        );
+        return await setUser(userCredential.user as unknown as AuthUser);
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+export const createUser = async (data: FieldValues) => {
+    try {
+        const { user } = await createUserWithEmailAndPassword(
+            auth,
+            data.email,
+            data.password,
+        );
+        await setDoc(doc(db, DatabaseCollectionEnum.USERS, user.uid), {});
+    } catch (e) {
+        console.error(e);
     }
 };
 

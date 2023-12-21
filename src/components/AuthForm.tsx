@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { useForm } from "react-hook-form";
+import {FieldValues, useForm} from "react-hook-form";
 import { Title } from "./Title.tsx";
 import type { UserCredentialsDto } from "../types/dto/UserCredentialsDto.ts";
 
@@ -19,7 +19,7 @@ interface AuthFormProperties {
     passwordError?: string;
     backEndError?: string;
     loading: boolean;
-    onSubmit: (data: UserCredentialsDto) => Promise<void>;
+    onSubmit: (data: FieldValues) => void;
     textButton: string;
 }
 
