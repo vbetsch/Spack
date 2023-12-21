@@ -20,11 +20,6 @@ import {
     removeLikedPost,
 } from "../database/queries/UserQueries.ts";
 import { UserActionEnum } from "../reducers/UserReducer.ts";
-import {
-    createAndGetBookmark,
-    deleteBookmark,
-    searchBookmark,
-} from "../database/queries/BookmarkQueries.ts";
 
 interface ThreadProperties {
     data: ThreadDocument;
@@ -38,7 +33,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
     const [likeType, setLikeType] = useState<IconProp>(faHeartDefault);
     const [bookmarkType, setBookmarkType] =
         useState<IconProp>(faBookmarkDefault);
-    const [bookmarkId, setBookmarkId] = useState<string | undefined>(undefined);
+    // const [bookmarkId, setBookmarkId] = useState<string | undefined>(undefined);
     const navigate = useNavigate();
 
     // Toggle actions
@@ -114,66 +109,45 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
 
     const saveOrUnsavepost = (save: boolean) => {
         const icon = save ? faBookmarkEnable : faBookmarkDefault;
-        // const actionToUserBookmarks = save
+        // TODO: const actionToUserBookmarks = save
         //     ? addUserBookmark
         //     : removeUserBookmark;
-        // const actionToPostBookmarks = save
+        // TODO: const actionToPostBookmarks = save
         //     ? addPostBookmark
         //     : removePostBookmark;
 
-        if (!post) {
-            console.warn("The post is not yet loaded");
-            return;
-        }
-        if (!state.currentUser) {
-            console.warn("You are not login");
-            return;
-        }
-
-        if (save) {
-            createAndGetBookmark({
-                postId: post.id,
-                userId: state.currentUser.id,
-            }).catch((e) => {
-                console.error(e);
-            });
-        } else {
-            if (!bookmarkId) {
-                console.warn("Bookmark not found");
-                return;
-            }
-            deleteBookmark({
-                id: bookmarkId,
-                postId: post.id,
-                userId: state.currentUser.id,
-            }).catch((e) => {
-                console.error(e);
-            });
-        }
+        // if (!post) {
+        //     console.warn("The post is not yet loaded");
+        //     return;
+        // }
+        // if (!state.currentUser) {
+        //     console.warn("You are not login");
+        //     return;
+        // }
+        //
+        // if (save) {
+        //     createAndGetBookmark({
+        //         postId: post.id,
+        //         userId: state.currentUser.id,
+        //     }).catch((e) => {
+        //         console.error(e);
+        //     });
+        // } else {
+        //     if (!bookmarkId) {
+        //         console.warn("Bookmark not found");
+        //         return;
+        //     }
+        //     deleteBookmark({
+        //         id: bookmarkId,
+        //         postId: post.id,
+        //         userId: state.currentUser.id,
+        //     }).catch((e) => {
+        //         console.error(e);
+        //     });
+        // }
 
         setBookmarkType(icon);
     };
-
-    useEffect(() => {
-        if (post && state.currentUser) {
-            searchBookmark(post.id, state.currentUser.id)
-                .then((data) => {
-                    if (!data) {
-                        return;
-                    }
-                    console.log(
-                        "(21/12/2023 23:10)  @reyks  [Thread.tsx:194 -  - ]  post  ",
-                        post.nbLikes,
-                        "data.id",
-                        data.id,
-                    );
-                    setBookmarkId(data.id);
-                })
-                .catch((e) => {
-                    console.error(e);
-                });
-        }
-    }, []);
 
     useEffect(() => {
         setLoadingContent(true);
@@ -192,11 +166,11 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
                     setLikeType(faHeartDefault);
                 }
 
-                if (bookmarkId) {
-                    setBookmarkType(faBookmarkEnable);
-                } else {
-                    setBookmarkType(faBookmarkDefault);
-                }
+                // if (bookmarkId) {
+                //     setBookmarkType(faBookmarkEnable);
+                // } else {
+                //     setBookmarkType(faBookmarkDefault);
+                // }
             })
             .catch((e) => {
                 console.error(e);
@@ -205,7 +179,26 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
                 setLoadingContent(false);
                 setLoadingCounters(false);
             });
-    }, []);
+
+        // if (post && state.currentUser) {
+        //     searchBookmark(post.id, state.currentUser.id)
+        //         .then((data) => {
+        //             if (!data) {
+        //                 return;
+        //             }
+        //             console.log(
+        //                 "(21/12/2023 23:10)  @reyks  [Thread.tsx:194 -  - ]  post  ",
+        //                 post.nbLikes,
+        //                 "data.id",
+        //                 data.id,
+        //             );
+        //             setBookmarkId(data.id);
+        //         })
+        //         .catch((e) => {
+        //             console.error(e);
+        //         });
+        // }
+    }, [likeType]);
 
     return (
         <div className="thread">
