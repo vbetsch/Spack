@@ -18,42 +18,43 @@ export const LoginPage = (): React.ReactNode => {
         setLoading(true);
         signIn(data)
             .then((snap) => {
-                if (snap) {
-                    dispatch({
-                        type: AuthActionEnum.LOGIN,
-                        payload: {
-                            id: snap.id,
-                            ...snap.data(),
-                        },
-                    });
-                    navigate("/profile");
+                if (!snap) {
+                    return;
                 }
+                dispatch({
+                    type: AuthActionEnum.LOGIN,
+                    payload: {
+                        id: snap.id,
+                        ...snap.data(),
+                    },
+                });
+                navigate("/profile");
             })
             .catch((error: unknown) => {
-                if (error instanceof FirebaseError) {
-                    switch (error.code) {
-                        case "auth/invalid-credential":
-                            setError(
-                                "Les informations que vous avez renseignées sont fausses",
-                            );
-                            break;
-                        case "auth/invalid-email":
-                            setError("Le format de l'email est invalide");
-                            break;
-                        case "auth/email-already-in-use":
-                            setError("L'email est déjà utilisé'");
-                            break;
-                        case "auth/too-many-requests":
-                            setError(
-                                "Trop de requêtes envoyées au serveur. Patientez quelques instants...",
-                            );
-                            break;
-                        default:
-                            setError("Une erreur est survenue : " + error.code);
-                            break;
-                    }
-                } else {
+                if (!(error instanceof FirebaseError)) {
                     setError("An error has occurred");
+                    return;
+                }
+                switch (error.code) {
+                    case "auth/invalid-credential":
+                        setError(
+                            "Les informations que vous avez renseignées sont fausses",
+                        );
+                        break;
+                    case "auth/invalid-email":
+                        setError("Le format de l'email est invalide");
+                        break;
+                    case "auth/email-already-in-use":
+                        setError("L'email est déjà utilisé'");
+                        break;
+                    case "auth/too-many-requests":
+                        setError(
+                            "Trop de requêtes envoyées au serveur. Patientez quelques instants...",
+                        );
+                        break;
+                    default:
+                        setError("Une erreur est survenue : " + error.code);
+                        break;
                 }
             })
             .finally(() => {

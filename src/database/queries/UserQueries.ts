@@ -73,18 +73,17 @@ export const addLikedPost = async (
             console.error(e);
         }
     } else {
-        if (!stateUser?.likedPosts.includes(postId)) {
-            // if (!postsIncludesPost(stateUser?.likedPosts, post)) {
-            try {
-                await setDoc(doc(db, DatabaseCollectionEnum.USERS, userId), {
-                    ...stateUser,
-                    likedPosts: [...stateUser.likedPosts, postId],
-                });
-            } catch (e) {
-                console.error(e);
-            }
-        } else {
+        if (stateUser?.likedPosts.includes(postId)) {
             console.warn("Post already liked");
+            return;
+        }
+        try {
+            await setDoc(doc(db, DatabaseCollectionEnum.USERS, userId), {
+                ...stateUser,
+                likedPosts: [...stateUser.likedPosts, postId],
+            });
+        } catch (e) {
+            console.error(e);
         }
     }
 };
@@ -94,33 +93,31 @@ export const removeLikedPost = async (
     stateUser: UserDocument | undefined,
     postId: string,
 ) => {
-    if (stateUser?.likedPosts != null) {
-        if (stateUser?.likedPosts.includes(postId)) {
-            // if (postsIncludesPost(stateUser?.likedPosts, post)) {
-            const newLikedPosts = stateUser.likedPosts;
-            const index = newLikedPosts.indexOf(postId);
-
-            if (index !== -1) {
-                newLikedPosts.splice(index, 1);
-
-                try {
-                    await setDoc(
-                        doc(db, DatabaseCollectionEnum.USERS, userId),
-                        {
-                            ...stateUser,
-                            likedPosts: newLikedPosts,
-                        },
-                    );
-                } catch (e) {
-                    console.error(e);
-                }
-            } else {
-                console.warn("Cannot remove this post to your LikedPosts");
-            }
-        } else {
-            console.warn("Post already unliked");
-        }
-    } else {
+    if (stateUser?.likedPosts == null) {
         console.warn("You can't unlike a post");
+        return;
+    }
+    if (!stateUser?.likedPosts.includes(postId)) {
+        console.warn("Post already unliked");
+        return;
+    }
+
+    const newLikedPosts = stateUser.likedPosts;
+    const index = newLikedPosts.indexOf(postId);
+
+    if (index === -1) {
+        console.warn("Cannot remove this post to your LikedPosts");
+        return;
+    }
+
+    newLikedPosts.splice(index, 1);
+
+    try {
+        await setDoc(doc(db, DatabaseCollectionEnum.USERS, userId), {
+            ...stateUser,
+            likedPosts: newLikedPosts,
+        });
+    } catch (e) {
+        console.error(e);
     }
 };

@@ -15,15 +15,16 @@ export const ProtectedRoutes = (): ReactNode => {
     useEffect(() => {
         getUser()
             .then((snap) => {
-                if (snap != null) {
-                    dispatch({
-                        type: AuthActionEnum.LOGIN,
-                        payload: {
-                            id: snap.id,
-                            ...snap.data(),
-                        } as UserDocument,
-                    });
+                if (!snap) {
+                    return;
                 }
+                dispatch({
+                    type: AuthActionEnum.LOGIN,
+                    payload: {
+                        id: snap.id,
+                        ...snap.data(),
+                    } as UserDocument,
+                });
             })
             .catch((e) => {
                 console.error(e);

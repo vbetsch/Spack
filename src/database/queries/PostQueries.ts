@@ -13,12 +13,11 @@ export const getPost = async (
         );
         if (postSnap == null) {
             return;
-        } else {
-            return {
-                id: postSnap.id,
-                ...postSnap.data(),
-            } as unknown as PostDocument;
         }
+        return {
+            id: postSnap.id,
+            ...postSnap.data(),
+        } as unknown as PostDocument;
     } catch (e) {
         console.error(e);
     }

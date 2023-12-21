@@ -75,33 +75,38 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
         const authAction = like ? AuthActionEnum.LIKE : AuthActionEnum.UNLIKE;
 
         setLikeType(icon);
+
         if (!post) {
             console.warn("The post is not yet loaded");
-        } else {
-            if (!user) {
-                console.warn("You are not login");
-            } else {
-                setLoadingCounters(true);
-                setNbLikes(data, post, likeValue).catch((e) => {
-                    console.error(e);
-                });
-                actionToLikedPosts(
-                    user.uid.toString(),
-                    state.currentUser,
-                    post.id.toString(),
-                )
-                    .then(() => {
-                        dispatch({
-                            type: authAction,
-                            payload: post.id.toString(),
-                        });
-                    })
-                    .catch((e) => {
-                        console.error(e);
-                    });
-                setLoadingCounters(false);
-            }
+            return;
         }
+        if (!user) {
+            console.warn("You are not login");
+            return;
+        }
+
+        setLoadingCounters(true);
+
+        setNbLikes(data, post, likeValue).catch((e) => {
+            console.error(e);
+        });
+
+        actionToLikedPosts(
+            user.uid.toString(),
+            state.currentUser,
+            post.id.toString(),
+        )
+            .then(() => {
+                dispatch({
+                    type: authAction,
+                    payload: post.id.toString(),
+                });
+            })
+            .catch((e) => {
+                console.error(e);
+            });
+
+        setLoadingCounters(false);
     };
 
     const saveOrUnsavepost = (save: boolean) => {
@@ -117,16 +122,14 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
         setLoadingCounters(true);
         getPost(data)
             .then((post) => {
-                if (post) {
-                    setPost(post);
-                    if (state.currentUser) {
-                        if (state.currentUser.likedPosts.includes(post.id)) {
-                            setLikeType(faHeartEnable);
-                        }
-                        if (!state.currentUser.likedPosts.includes(post.id)) {
-                            setLikeType(faHeartDefault);
-                        }
-                    }
+                if (!post) {
+                    return;
+                }
+                setPost(post);
+                if (state.currentUser?.likedPosts.includes(post.id)) {
+                    setLikeType(faHeartEnable);
+                } else {
+                    setLikeType(faHeartDefault);
                 }
             })
             .catch((e) => {
