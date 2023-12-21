@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 import { FieldValues } from "react-hook-form";
 
-export const setUser = async (data: AuthUser) => {
+export const setAndGetUser = async (data: AuthUser) => {
     try {
         localStorage.setItem("@user", JSON.stringify(data));
         return await getDoc(doc(db, DatabaseCollectionEnum.USERS, data.uid));
@@ -39,7 +39,7 @@ export const signIn = async (data: FieldValues) => {
             data.email,
             data.password,
         );
-        return await setUser(userCredential.user as unknown as AuthUser);
+        return await setAndGetUser(userCredential.user as unknown as AuthUser);
     } catch (e) {
         console.error(e);
     }
