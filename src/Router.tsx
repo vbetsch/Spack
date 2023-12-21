@@ -14,10 +14,10 @@ export const Router = (): React.ReactNode => (
         <Routes>
             <Route element={<AuthProvider />}>
                 <Route element={<NavbarPage />}>
-                    <Route index element={<ThreadsPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
                     <Route element={<ProtectedRoutes />}>
+                        <Route index element={<ThreadsPage />} />
                         <Route path="/profile" element={<ProfilePage />} />
                         <Route path="/bookmarks" element={<BookmarksPage />} />
                     </Route>
