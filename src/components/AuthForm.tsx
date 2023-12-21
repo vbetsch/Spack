@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import {FieldValues, useForm} from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { Title } from "./Title.tsx";
 import type { UserCredentialsDto } from "../types/dto/UserCredentialsDto.ts";
 
@@ -57,6 +57,7 @@ export const AuthForm = ({
                             variant="standard"
                             placeholder="test@mail.com"
                             required
+                            autoFocus
                         />
                     </FormControl>
                     <FormControl required variant={"standard"}>
