@@ -14,17 +14,22 @@ export const ThreadsPage = (): React.ReactNode => {
 
     const getAllThreads = async (): Promise<void> => {
         setLoading(true);
-        const querySnapshot = await getDocs(
-            collection(db, DatabaseCollectionEnum.THREADS),
-        );
-        const threads: ThreadDocument[] = [];
-        querySnapshot.forEach((doc) => {
-            threads.push({ id: doc.id, ...doc.data() } as ThreadDocument);
-        });
-        if (threads.length > 0) {
-            setThreads(threads);
+        try {
+            const querySnapshot = await getDocs(
+                collection(db, DatabaseCollectionEnum.THREADS),
+            );
+            const threads: ThreadDocument[] = [];
+            querySnapshot.forEach((doc) => {
+                threads.push({ id: doc.id, ...doc.data() } as ThreadDocument);
+            });
+            if (threads.length > 0) {
+                setThreads(threads);
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     useEffect(() => {

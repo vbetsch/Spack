@@ -7,16 +7,20 @@ import { ThreadDocument } from "../../types/documents/ThreadDocument.ts";
 export const getPost = async (
     thread: ThreadDocument,
 ): Promise<PostDocument | undefined> => {
-    const postSnap = await getDoc(
-        doc(db, DatabaseCollectionEnum.POSTS, thread.post.id),
-    );
-    if (postSnap == null) {
-        return;
-    } else {
-        return {
-            id: postSnap.id,
-            ...postSnap.data(),
-        } as unknown as PostDocument;
+    try {
+        const postSnap = await getDoc(
+            doc(db, DatabaseCollectionEnum.POSTS, thread.post.id),
+        );
+        if (postSnap == null) {
+            return;
+        } else {
+            return {
+                id: postSnap.id,
+                ...postSnap.data(),
+            } as unknown as PostDocument;
+        }
+    } catch (e) {
+        console.error(e);
     }
 };
 
@@ -25,8 +29,12 @@ export const setNbLikes = async (
     post: PostDocument,
     toAdd: number,
 ): Promise<void> => {
-    await setDoc(doc(db, DatabaseCollectionEnum.POSTS, thread.post.id), {
-        ...post,
-        nbLikes: post.nbLikes + toAdd,
-    });
+    try {
+        await setDoc(doc(db, DatabaseCollectionEnum.POSTS, thread.post.id), {
+            ...post,
+            nbLikes: post.nbLikes + toAdd,
+        });
+    } catch (e) {
+        console.error(e);
+    }
 };

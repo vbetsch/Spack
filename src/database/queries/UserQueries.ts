@@ -7,10 +7,14 @@ import { AuthUser } from "../../types/AuthUserType.ts";
 export const getUser = async () => {
     const user = localStorage.getItem("@user");
     if (user != null) {
-        const userData: AuthUser = JSON.parse(user);
-        return await getDoc(
-            doc(db, DatabaseCollectionEnum.USERS, userData.uid.toString()),
-        );
+        try {
+            const userData: AuthUser = JSON.parse(user);
+            return await getDoc(
+                doc(db, DatabaseCollectionEnum.USERS, userData.uid.toString()),
+            );
+        } catch (e) {
+            console.error(e);
+        }
     }
 };
 
@@ -20,17 +24,25 @@ export const addLikedPost = async (
     postId: string,
 ) => {
     if (stateUser?.likedPosts == null) {
-        await setDoc(doc(db, DatabaseCollectionEnum.USERS, userId), {
-            ...stateUser,
-            likedPosts: [postId],
-        });
+        try {
+            await setDoc(doc(db, DatabaseCollectionEnum.USERS, userId), {
+                ...stateUser,
+                likedPosts: [postId],
+            });
+        } catch (e) {
+            console.error(e);
+        }
     } else {
         if (!stateUser?.likedPosts.includes(postId)) {
             // if (!postsIncludesPost(stateUser?.likedPosts, post)) {
-            await setDoc(doc(db, DatabaseCollectionEnum.USERS, userId), {
-                ...stateUser,
-                likedPosts: [...stateUser.likedPosts, postId],
-            });
+            try {
+                await setDoc(doc(db, DatabaseCollectionEnum.USERS, userId), {
+                    ...stateUser,
+                    likedPosts: [...stateUser.likedPosts, postId],
+                });
+            } catch (e) {
+                console.error(e);
+            }
         } else {
             console.warn("Post already liked");
         }
@@ -51,10 +63,17 @@ export const removeLikedPost = async (
             if (index !== -1) {
                 newLikedPosts.splice(index, 1);
 
-                await setDoc(doc(db, DatabaseCollectionEnum.USERS, userId), {
-                    ...stateUser,
-                    likedPosts: newLikedPosts,
-                });
+                try {
+                    await setDoc(
+                        doc(db, DatabaseCollectionEnum.USERS, userId),
+                        {
+                            ...stateUser,
+                            likedPosts: newLikedPosts,
+                        },
+                    );
+                } catch (e) {
+                    console.error(e);
+                }
             } else {
                 console.warn("Cannot remove this post to your LikedPosts");
             }
