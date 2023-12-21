@@ -113,20 +113,28 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
     };
 
     useEffect(() => {
+        setLoadingContent(true);
+        setLoadingCounters(true);
         getPost(data)
             .then((post) => {
-                setLoadingContent(true);
-                setLoadingCounters(true);
                 if (post) {
                     setPost(post);
+                    if (state.currentUser) {
+                        if (state.currentUser.likedPosts.includes(post.id)) {
+                            setLikeType(faHeartEnable);
+                        }
+                        if (!state.currentUser.likedPosts.includes(post.id)) {
+                            setLikeType(faHeartDefault);
+                        }
+                    }
                 }
+            })
+            .catch((e) => {
+                console.error(e);
             })
             .finally(() => {
                 setLoadingContent(false);
                 setLoadingCounters(false);
-            })
-            .catch((e) => {
-                console.error(e);
             });
     }, [likeType]);
 
