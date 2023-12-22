@@ -9,6 +9,7 @@
 .thread .thread-content {
     display: flex;
     flex-direction: column;
+    cursor: pointer;
     gap: 3px;
 }
 

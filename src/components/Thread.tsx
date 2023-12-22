@@ -12,14 +12,11 @@ interface ThreadProperties {
 
 export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
     const [post, setPost] = useState<PostDocument | undefined>(undefined);
-    const [loadingContent, setLoadingContent] = useState<boolean>(false);
-    const [loadingCounters, setLoadingCounters] = useState<boolean>(false);
-    // const [bookmarkId, setBookmarkId] = useState<string | undefined>(undefined);
+    const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        setLoadingContent(true);
-        setLoadingCounters(true);
+        setLoading(true);
         getPost(data)
             .then((post) => {
                 if (!post) {
@@ -31,15 +28,15 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
                 console.error(e);
             })
             .finally(() => {
-                setLoadingCounters(false);
+                setLoading(false);
             });
     }, []);
 
     return (
         <div className="thread">
             <Counters
-                loading={loadingCounters}
-                setLoading={setLoadingCounters}
+                loading={loading}
+                setLoading={setLoading}
                 post={post}
                 setPost={setPost}
             />
@@ -49,7 +46,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
             >
                 <span className="title">{data.title}</span>
                 <p className="content">
-                    {loadingContent && "Loading..."}
+                    {loading && "Loading..."}
                     {post?.content}
                 </p>
                 <div className="tags">
