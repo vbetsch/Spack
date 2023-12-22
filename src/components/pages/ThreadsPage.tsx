@@ -3,7 +3,9 @@ import { Title } from "../Title.tsx";
 import type { ThreadDocument } from "../../types/documents/ThreadDocument.ts";
 import { Thread } from "../Thread.tsx";
 import { getThreads } from "../../database/queries/ThreadQueries.ts";
-import {Loading} from "../Loading.tsx";
+import { Loading } from "../Loading.tsx";
+import { Button } from "../Button.tsx";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 
 export const ThreadsPage = (): React.ReactNode => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -29,13 +31,26 @@ export const ThreadsPage = (): React.ReactNode => {
             });
     };
 
+    const writePost = () => {
+        setLoading(true);
+        setLoading(false);
+    };
+
     useEffect(() => {
         getAllThreads();
     }, []);
 
     return (
         <div className="container">
-            <Title text={"All posts"} />
+            <div className="header">
+                <Title text={"All posts"} />
+                <Button
+                    img={faPen}
+                    text={"Write post"}
+                    loading={loading}
+                    action={writePost}
+                />
+            </div>
             <div className="threads">
                 {loading && <Loading />}
                 {threads?.map((thread, key) => (

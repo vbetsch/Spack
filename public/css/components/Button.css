@@ -1,0 +1,13 @@
+.button {
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "JetBrains Mono", sans-serif;
+    background-color: var(--blue6);
+    color: var(--white);
+    border-radius: 5px;
+    padding: 8px 12px;
+    border: none;
+    gap: 7px;
+}

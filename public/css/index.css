@@ -5,10 +5,13 @@
 
 /* Pages */
 @import "components/pages/ThreadPage.css";
+@import "components/pages/ThreadsPage.css";
 
 /* Components */
 @import "components/AuthForm.css";
+@import "components/Button.css";
 @import "components/Counters.css";
+@import "components/Loading.css";
 @import "components/Navbar.css";
 @import "components/Tags.css";
 @import "components/Thread.css";
