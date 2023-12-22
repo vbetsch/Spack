@@ -5,6 +5,7 @@
 
 /* Components */
 @import "components/AuthForm.css";
+@import "components/Counters.css";
 @import "components/Navbar.css";
 @import "components/Tag.css";
 @import "components/Thread.css";

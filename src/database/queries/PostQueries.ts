@@ -24,19 +24,20 @@ export const getPost = async (
 };
 
 export const setNbLikes = async (
-    thread: ThreadDocument,
     post: PostDocument,
     toAdd: number,
-): Promise<void> => {
+): Promise<boolean> => {
     try {
-        await setDoc(doc(db, DatabaseCollectionEnum.POSTS, thread.post.id), {
+        await setDoc(doc(db, DatabaseCollectionEnum.POSTS, post.id), {
             ...post,
             nbLikes: post.nbLikes + toAdd,
         });
+        return true;
     } catch (e) {
         console.error(e);
     }
+    return false;
 };
 
-export const addPostBookmark = () => {}
-export const removePostBookmark = () => {}
+export const addPostBookmark = () => {};
+export const removePostBookmark = () => {};
