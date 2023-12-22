@@ -5,18 +5,19 @@ import { UserActionEnum } from "../../reducers/UserReducer.ts";
 import { LoadingButton } from "@mui/lab";
 import type { PostDocument } from "../../types/documents/PostDocument.ts";
 import type { AuthUser } from "../../types/AuthUserType.ts";
-import {Loading} from "../Loading.tsx";
+import { Loading } from "../Loading.tsx";
+import { ConfigContext } from "../../providers/ConfigProvider.tsx";
 
 export const ProfilePage = (): React.ReactNode => {
-    const lang = "fr";
+    const configContext = useContext(ConfigContext);
+    const userContext = useContext(UserContext);
     const userData = localStorage.getItem("@user");
     const [user, setUser] = useState<AuthUser | undefined>(undefined);
-    const { state, dispatch } = useContext(UserContext);
     const [comments, setComments] = useState<PostDocument[]>([]);
 
     const logOut = (): void => {
         localStorage.removeItem("@user");
-        dispatch({
+        userContext.dispatch({
             type: UserActionEnum.LOGOUT,
             payload: undefined,
         });
@@ -29,8 +30,8 @@ export const ProfilePage = (): React.ReactNode => {
                 ...dataUser,
             });
         }
-        if (state.currentUser != null) {
-            setComments(state.currentUser.comments);
+        if (userContext.state.currentUser != null) {
+            setComments(userContext.state.currentUser.comments);
         }
     }, []);
 
@@ -42,15 +43,23 @@ export const ProfilePage = (): React.ReactNode => {
             </p>
             <p>
                 <strong>Créé le</strong> :{" "}
-                {user != null
-                    ? user.createdAt.toDate().toLocaleString(lang)
-                    : <Loading />}
+                {user != null ? (
+                    user.createdAt
+                        .toDate()
+                        .toLocaleString(configContext.state.lang)
+                ) : (
+                    <Loading />
+                )}
             </p>
             <p>
                 <strong>Dernière connexion</strong> :{" "}
-                {user != null
-                    ? user.lastLoginAt.toDate().toLocaleString(lang)
-                    : <Loading />}
+                {user != null ? (
+                    user.lastLoginAt
+                        .toDate()
+                        .toLocaleString(configContext.state.lang)
+                ) : (
+                    <Loading />
+                )}
             </p>
             <p>
                 <strong>Email</strong> :{" "}
