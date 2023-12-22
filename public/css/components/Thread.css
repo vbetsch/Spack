@@ -28,9 +28,3 @@
     overflow: hidden;
     margin: 0;
 }
-
-.thread .thread-content .tags {
-    display: flex;
-    padding: 5px 0;
-    gap: 7px;
-}

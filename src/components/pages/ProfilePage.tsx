@@ -26,8 +26,6 @@ export const ProfilePage = (): React.ReactNode => {
             const dataUser = JSON.parse(userData);
             setUser({
                 ...dataUser,
-                createdAt: new Date(dataUser.createdAt * 1),
-                lastLoginAt: new Date(dataUser.lastLoginAt * 1),
             });
         }
         if (state.currentUser != null) {
@@ -44,13 +42,13 @@ export const ProfilePage = (): React.ReactNode => {
             <p>
                 <strong>Créé le</strong> :{" "}
                 {user != null
-                    ? user.createdAt.toLocaleString(lang)
+                    ? user.createdAt.toDate().toLocaleString(lang)
                     : "Loading..."}
             </p>
             <p>
                 <strong>Dernière connexion</strong> :{" "}
                 {user != null
-                    ? user.lastLoginAt.toLocaleString(lang)
+                    ? user.lastLoginAt.toDate().toLocaleString(lang)
                     : "Loading..."}
             </p>
             <p>

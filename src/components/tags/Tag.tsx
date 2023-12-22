@@ -1,7 +1,7 @@
 import React from "react";
-import type { TagsEnum } from "../types/TagsEnum.ts";
+import {TagsEnum} from "../../types/TagsEnum.ts";
 
-interface TagProperties {
+export interface TagProperties {
     name: TagsEnum;
 }
 

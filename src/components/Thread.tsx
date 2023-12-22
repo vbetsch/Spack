@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Tag } from "./Tag.tsx";
 import type { ThreadDocument } from "../types/documents/ThreadDocument.ts";
 import type { PostDocument } from "../types/documents/PostDocument.ts";
 import { useNavigate } from "react-router";
 import { getPost } from "../database/queries/PostQueries.ts";
 import { Counters } from "./Counters.tsx";
+import { TagList } from "./tags/TagList.tsx";
 
 interface ThreadProperties {
     data: ThreadDocument;
@@ -49,12 +49,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
                     {loading && "Loading..."}
                     {post?.content}
                 </p>
-                <div className="tags">
-                    {data.tags.length > 0 &&
-                        data.tags.map((tag, key) => (
-                            <Tag key={key} name={tag} />
-                        ))}
-                </div>
+                <TagList tags={data.tags} />
             </div>
         </div>
     );

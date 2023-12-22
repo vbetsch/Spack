@@ -1,0 +1,40 @@
+.thread-details {
+    display: flex;
+    padding: 20px 0;
+    gap: 20px;
+}
+
+/* Counters */
+.thread-details .left-part .counters {
+    height: 61px;
+    padding: 16px 0;
+    justify-content: space-between;
+}
+
+.thread-details .right-part {
+    width: 100%;
+}
+.thread-details .right-part .title {
+    margin: 0;
+}
+
+/* Infos */
+.thread-details .right-part .right-part-content .infos {
+    font-family: "JetBrains Mono", sans-serif;
+    font-size: 12px;
+    width: 100%;
+    display: flex;
+    gap: 5%;
+}
+.thread-details .right-part .right-part-content .infos .info > p {
+    color: var(--grey);
+    margin: 0;
+}
+.thread-details .right-part .right-part-content .infos .info > p > span {
+    color: var(--dark);
+}
+
+/* Separator */
+.thread-details .right-part .right-part-content .separator {
+    padding: 7px 0;
+}

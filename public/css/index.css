@@ -3,10 +3,13 @@
 /* Fonts */
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap");
 
+/* Pages */
+@import "components/pages/ThreadPage.css";
+
 /* Components */
 @import "components/AuthForm.css";
 @import "components/Counters.css";
 @import "components/Navbar.css";
-@import "components/Tag.css";
+@import "components/Tags.css";
 @import "components/Thread.css";
 @import "components/Title.css";

@@ -1,6 +1,8 @@
+import {Timestamp} from "firebase/firestore";
+
 export interface AuthUser {
     uid: string;
     email: string;
-    createdAt: number;
-    lastLoginAt: number;
+    createdAt: Timestamp;
+    lastLoginAt: Timestamp;
 }
