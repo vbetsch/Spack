@@ -5,6 +5,7 @@ import { UserActionEnum } from "../../reducers/UserReducer.ts";
 import { LoadingButton } from "@mui/lab";
 import type { PostDocument } from "../../types/documents/PostDocument.ts";
 import type { AuthUser } from "../../types/AuthUserType.ts";
+import {Loading} from "../Loading.tsx";
 
 export const ProfilePage = (): React.ReactNode => {
     const lang = "fr";
@@ -37,23 +38,23 @@ export const ProfilePage = (): React.ReactNode => {
         <div className="container">
             <Title text={"Profile"} />
             <p>
-                <strong>UID</strong> : {user != null ? user.uid : "Loading..."}
+                <strong>UID</strong> : {user != null ? user.uid : <Loading />}
             </p>
             <p>
                 <strong>Créé le</strong> :{" "}
                 {user != null
                     ? user.createdAt.toDate().toLocaleString(lang)
-                    : "Loading..."}
+                    : <Loading />}
             </p>
             <p>
                 <strong>Dernière connexion</strong> :{" "}
                 {user != null
                     ? user.lastLoginAt.toDate().toLocaleString(lang)
-                    : "Loading..."}
+                    : <Loading />}
             </p>
             <p>
                 <strong>Email</strong> :{" "}
-                {user != null ? user.email : "Loading..."}
+                {user != null ? user.email : <Loading />}
             </p>
             <p>
                 <strong>Comments</strong>

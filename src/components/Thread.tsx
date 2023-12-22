@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { getPost } from "../database/queries/PostQueries.ts";
 import { Counters } from "./Counters.tsx";
 import { TagList } from "./tags/TagList.tsx";
+import { Loading } from "./Loading.tsx";
 
 interface ThreadProperties {
     data: ThreadDocument;
@@ -46,7 +47,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
             >
                 <span className="title">{data.title}</span>
                 <p className="content">
-                    {loading && "Loading..."}
+                    {loading && <Loading />}
                     {post?.content}
                 </p>
                 <TagList tags={data.tags} />

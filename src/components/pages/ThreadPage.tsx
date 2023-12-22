@@ -7,6 +7,7 @@ import { Counters } from "../Counters.tsx";
 import { getPost } from "../../database/queries/PostQueries.ts";
 import { PostDocument } from "../../types/documents/PostDocument.ts";
 import { TagList } from "../tags/TagList.tsx";
+import { Loading } from "../Loading.tsx";
 
 export const ThreadPage = (): React.ReactNode => {
     const { threadId } = useParams();
@@ -18,6 +19,7 @@ export const ThreadPage = (): React.ReactNode => {
         if (!threadId) {
             return;
         }
+
         getThreadById(threadId)
             .then((data) => {
                 setLoading(true);
@@ -46,72 +48,74 @@ export const ThreadPage = (): React.ReactNode => {
 
     return (
         <div className="container">
-            {loading
-                ? "Loading..."
-                : thread && (
-                      <div className="thread-details">
-                          <div className="left-part">
-                              <Counters
-                                  loading={loading}
-                                  setLoading={setLoading}
-                                  post={post}
-                                  setPost={setPost}
-                              />
-                          </div>
-                          <div className="right-part">
-                              <div className="right-part-content">
-                                  <Title text={thread.title} />
-                                  <div className="infos">
-                                      <div className="info">
-                                          <p>
-                                              Created{" "}
-                                              <span>
-                                                  {loading && "Loading..."}
-                                                  {post && post.createdDate
-                                                      ? post.createdDate
-                                                            .toDate()
-                                                            .toDateString()
-                                                      : "unknown"}
-                                              </span>
-                                          </p>
-                                      </div>
-                                      {/* TODO: Create "by creator" */}
-                                      <div className="info">
-                                          <p>
-                                              Modified{" "}
-                                              <span>
-                                                  {loading && "Loading..."}
-                                                  {post && post.modifiedDate
-                                                      ? post.modifiedDate
-                                                            .toDate()
-                                                            .toDateString()
-                                                      : "unknown"}
-                                              </span>
-                                          </p>
-                                      </div>
-                                      <div className="info">
-                                          <p>
-                                              Views{" "}
-                                              <span>
-                                                  {loading && "Loading..."}
-                                                  {post && post.nbViews
-                                                      ? post.nbViews
-                                                      : "unknown"}
-                                              </span>
-                                          </p>
-                                      </div>
-                                  </div>
-                                  <div className="separator">
-                                      <TagList tags={thread.tags} />
-                                  </div>
-                                  <div className="content">
-                                      {loading && "Loading..."}
-                                      {post && post.content}
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  )}
+            {loading ? (
+                <Loading />
+            ) : (
+                thread && (
+                    <div className="thread-details">
+                        <div className="left-part">
+                            <Counters
+                                loading={loading}
+                                setLoading={setLoading}
+                                post={post}
+                                setPost={setPost}
+                            />
+                        </div>
+                        <div className="right-part">
+                            <div className="right-part-content">
+                                <Title text={thread.title} />
+                                <div className="infos">
+                                    <div className="info">
+                                        <p>
+                                            Created{" "}
+                                            <span>
+                                                {loading && <Loading />}
+                                                {post && post.createdDate
+                                                    ? post.createdDate
+                                                          .toDate()
+                                                          .toDateString()
+                                                    : "unknown"}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    {/* TODO: Create "by creator" */}
+                                    <div className="info">
+                                        <p>
+                                            Modified{" "}
+                                            <span>
+                                                {loading && <Loading />}
+                                                {post && post.modifiedDate
+                                                    ? post.modifiedDate
+                                                          .toDate()
+                                                          .toDateString()
+                                                    : "unknown"}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div className="info">
+                                        <p>
+                                            Views{" "}
+                                            <span>
+                                                {loading && <Loading />}
+                                                {post && post.nbViews
+                                                    ? post.nbViews
+                                                    : "unknown"}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="separator">
+                                    <TagList tags={thread.tags} />
+                                </div>
+                                <div className="content">
+                                    {loading && <Loading />}
+                                    {post && post.content}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            )}
         </div>
     );
 };
