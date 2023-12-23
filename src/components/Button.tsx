@@ -5,7 +5,7 @@ import { Loading } from "./Loading.tsx";
 
 export interface ButtonProperties {
     img?: IconDefinition;
-    text: string;
+    text?: string;
     action: () => void;
     loading?: boolean;
 }

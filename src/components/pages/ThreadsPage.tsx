@@ -6,8 +6,10 @@ import { getThreads } from "../../database/queries/ThreadQueries.ts";
 import { Loading } from "../Loading.tsx";
 import { Button } from "../Button.tsx";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { Modal } from "../Modal.tsx";
 
 export const ThreadsPage = (): React.ReactNode => {
+    const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [threads, setThreads] = useState<ThreadDocument[] | undefined>(
         undefined,
@@ -33,6 +35,7 @@ export const ThreadsPage = (): React.ReactNode => {
 
     const writePost = () => {
         setLoading(true);
+        setModalOpen(true);
         setLoading(false);
     };
 
@@ -42,6 +45,13 @@ export const ThreadsPage = (): React.ReactNode => {
 
     return (
         <div className="container">
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setModalOpen(false)}
+                position={300}
+            >
+                <p>test</p>
+            </Modal>
             <div className="header">
                 <Title text={"All posts"} />
                 <Button
