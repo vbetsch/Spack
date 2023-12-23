@@ -23,7 +23,7 @@ import { UserActionEnum } from "../reducers/UserReducer.ts";
 import { setNbLikes } from "../database/queries/PostQueries.ts";
 import { UserContext } from "../providers/UserProvider.tsx";
 import { useNavigate } from "react-router";
-import { PostDocument } from "../types/documents/PostDocument.ts";
+import { PostDocument } from "../types/objects/PostTypes.ts";
 
 export interface CountersInterface {
     loading: boolean;

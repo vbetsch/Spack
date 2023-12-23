@@ -1,5 +1,5 @@
 import type { Action } from "../types/ActionType";
-import type { UserDocument } from "../types/documents/UserDocument.ts";
+import type { UserDocument } from "../types/objects/UserTypes.ts";
 
 export enum UserActionEnum {
     LOGIN = "LOGIN",

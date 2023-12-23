@@ -1,7 +1,7 @@
 import { DatabaseCollectionEnum } from "../../types/DatabaseCollectionEnum.ts";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase.ts";
-import type { UserDocument } from "../../types/documents/UserDocument.ts";
+import type { UserDocument } from "../../types/objects/UserTypes.ts";
 import type { AuthUser } from "../../types/AuthUserType.ts";
 import {
     createUserWithEmailAndPassword,

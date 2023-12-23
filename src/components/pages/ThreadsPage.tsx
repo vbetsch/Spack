@@ -1,23 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Title } from "../Title.tsx";
-import type { ThreadDocument } from "../../types/documents/ThreadDocument.ts";
+import type {
+    CreateThreadDataDto,
+    ThreadDocument,
+} from "../../types/objects/ThreadTypes.ts";
 import { Thread } from "../Thread.tsx";
-import { getThreads } from "../../database/queries/ThreadQueries.ts";
 import { Loading } from "../Loading.tsx";
 import { Button } from "../Button.tsx";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { Modal } from "../Modal.tsx";
 import { CreateThreadForm } from "../forms/CreateThreadForm.tsx";
+import { createPost, getPostById } from "../../database/queries/PostQueries.ts";
+import { WritePostDto } from "../../types/dto/WritePostDto.ts";
+import { CreatePostDataDto } from "../../types/objects/PostTypes.ts";
+import { UserContext } from "../../providers/UserProvider.tsx";
+import {
+    createThread,
+    getThreadById, getThreads,
+} from "../../database/queries/ThreadQueries.ts";
 
 export const ThreadsPage = (): React.ReactNode => {
+    const { state } = useContext(UserContext);
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | undefined>(undefined);
+    const [threadsLoading, setThreadsLoading] = useState<boolean>(false);
+    const [createThreadLoading, setCreateThreadLoading] =
+        useState<boolean>(false);
     const [threads, setThreads] = useState<ThreadDocument[] | undefined>(
         undefined,
     );
 
     const getAllThreads = () => {
-        setLoading(true);
+        setThreadsLoading(true);
         getThreads()
             .then((data) => {
                 if (data) {
@@ -30,19 +44,93 @@ export const ThreadsPage = (): React.ReactNode => {
                 console.error(e);
             })
             .finally(() => {
-                setLoading(false);
+                setThreadsLoading(false);
             });
-    };
-
-    const writePost = () => {
-        setLoading(true);
-        setModalOpen(true);
-        setLoading(false);
     };
 
     useEffect(() => {
         getAllThreads();
     }, []);
+
+    const createNewThread = async (data: WritePostDto) => {
+        try {
+            if (!state.currentUser) {
+                console.warn("No current user found");
+                return;
+            }
+
+            const postData: CreatePostDataDto = {
+                content: data.content,
+                creator: state.currentUser,
+            };
+            const postRef = await createPost(postData);
+
+            if (!postRef) {
+                console.warn("Impossible to create post");
+                return;
+            }
+
+            const newPost = await getPostById(postRef.id);
+
+            if (!newPost) {
+                console.warn("Post created lost");
+                return;
+            }
+
+            const threadData: CreateThreadDataDto = {
+                title: data.title,
+                post: newPost,
+            };
+            const threadRef = await createThread(threadData);
+
+            if (!threadRef) {
+                console.warn("Impossible to create thread");
+                return;
+            } else {
+                return threadRef;
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const submitPost = (data: WritePostDto) => {
+        console.log(
+            "(23/12/2023 01:27)  @reyks  [ThreadsPage.tsx:45 -  - submitPost]    ",
+        );
+
+        setError(undefined);
+        setCreateThreadLoading(true);
+
+        createNewThread(data)
+            .then((threadRef) => {
+                if (!threadRef) {
+                    return;
+                }
+                getThreadById(threadRef.id)
+                    .then((thread) => {
+                        if (!thread) {
+                            return;
+                        }
+
+                        if (threads) {
+                            setThreads([...threads, thread]);
+                        } else {
+                            setThreads([thread]);
+                        }
+                    })
+                    .catch((e) => {
+                        console.error(e);
+                    });
+            })
+            .catch((e) => {
+                setCreateThreadLoading(false);
+                console.error(e);
+            })
+            .finally(() => {
+                setCreateThreadLoading(false);
+            });
+    };
 
     return (
         <div className="container">
@@ -55,7 +143,7 @@ export const ThreadsPage = (): React.ReactNode => {
                 <CreateThreadForm
                     title={"Write a post"}
                     loading={createThreadLoading}
-                    backEndError={backEndError}
+                    backEndError={error}
                     textButton={"Write"}
                     onSubmit={submitPost}
                 />
@@ -71,9 +159,11 @@ export const ThreadsPage = (): React.ReactNode => {
             </div>
             <div className="threads">
                 {threadsLoading && <Loading />}
-                {threads?.map((thread, key) => (
-                    <Thread key={key} data={thread} />
-                ))}
+                {threads
+                    ? threads.map((thread, key) => (
+                          <Thread key={key} data={thread} />
+                      ))
+                    : "Aucun thread n'a encore été créé"}
             </div>
         </div>
     );

@@ -1,7 +1,12 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebase.ts";
 import { DatabaseCollectionEnum } from "../../types/DatabaseCollectionEnum.ts";
-import { ThreadDocument } from "../../types/documents/ThreadDocument.ts";
+import {
+    CreateThreadDataDto,
+    CreateThreadDto,
+    InitialThreadData,
+    ThreadDocument,
+} from "../../types/objects/ThreadTypes.ts";
 
 export const getThreads = async () => {
     try {
@@ -29,6 +34,24 @@ export const getThreadById = async (id: string) => {
                 ...threadSnap.data(),
             } as ThreadDocument;
         }
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+export const createThread = async (data: CreateThreadDataDto) => {
+    try {
+        const initialThreadData: InitialThreadData = {
+            tags: [],
+        };
+        const newPost: CreateThreadDto = {
+            ...initialThreadData,
+            ...data,
+        };
+        return await addDoc(
+            collection(db, DatabaseCollectionEnum.POSTS),
+            newPost,
+        );
     } catch (e) {
         console.error(e);
     }

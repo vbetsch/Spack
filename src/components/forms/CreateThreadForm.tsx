@@ -2,9 +2,9 @@ import React from "react";
 import FormControl from "@mui/material/FormControl";
 import { TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Title } from "../Title.tsx";
-import type { CreateThreadDto } from "../../types/dto/CreateThreadDto.ts";
+import type { WritePostDto } from "../../types/dto/WritePostDto.ts";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -12,7 +12,7 @@ interface CreateThreadFormProperties {
     title: string;
     backEndError?: string;
     loading: boolean;
-    onSubmit: (data: FieldValues) => void;
+    onSubmit: (data: WritePostDto) => void;
     textButton: string;
 }
 
@@ -23,7 +23,7 @@ export const CreateThreadForm = ({
     onSubmit,
     textButton,
 }: CreateThreadFormProperties): React.ReactNode => {
-    const { register, handleSubmit } = useForm<CreateThreadDto>();
+    const { register, handleSubmit } = useForm<WritePostDto>();
 
     return (
         <div className="form">

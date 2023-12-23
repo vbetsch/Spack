@@ -10,10 +10,8 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase.ts";
 import { DatabaseCollectionEnum } from "../../types/DatabaseCollectionEnum.ts";
-import type { CreateBookmarkDto } from "../../types/dto/bookmark/CreateBookmarkDto.ts";
 import type { DocumentReference } from "firebase/firestore";
-import type { DeleteBookmarkDto } from "../../types/dto/bookmark/DeleteBookmarkDto.ts";
-import { BookmarkDocument } from "../../types/documents/BookmarkDocument.ts";
+import {BookmarkDocument, CreateBookmarkDto, DeleteBookmarkDto} from "../../types/objects/BookmarkTypes.ts";
 
 export const getBookmarkByDocRef = async (docRef: DocumentReference) => {
     try {

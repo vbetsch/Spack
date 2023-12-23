@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import type { BookmarkDocument } from "../../types/documents/BookmarkDocument.ts";
+import type { BookmarkDocument } from "../../types/objects/BookmarkTypes.ts";
 import { UserContext } from "../../providers/UserProvider.tsx";
 import { Title } from "../Title.tsx";
 

@@ -1,4 +1,4 @@
-export interface CreateThreadDto {
+export interface WritePostDto {
     title: string;
     content: string;
 }

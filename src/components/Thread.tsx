@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import type { ThreadDocument } from "../types/documents/ThreadDocument.ts";
-import type { PostDocument } from "../types/documents/PostDocument.ts";
+import type { ThreadDocument } from "../types/objects/ThreadTypes.ts";
+import type { PostDocument } from "../types/objects/PostTypes.ts";
 import { useNavigate } from "react-router";
-import { getPost } from "../database/queries/PostQueries.ts";
 import { Counters } from "./Counters.tsx";
 import { TagList } from "./tags/TagList.tsx";
 import { Loading } from "./Loading.tsx";
+import {getPostById} from "../database/queries/PostQueries.ts";
 
 interface ThreadProperties {
     data: ThreadDocument;
@@ -18,7 +18,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
 
     useEffect(() => {
         setLoading(true);
-        getPost(data)
+        getPostById(data.post.id)
             .then((post) => {
                 if (!post) {
                     return;

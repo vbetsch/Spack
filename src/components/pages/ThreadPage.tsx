@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getThreadById } from "../../database/queries/ThreadQueries.ts";
-import { ThreadDocument } from "../../types/documents/ThreadDocument.ts";
+import { ThreadDocument } from "../../types/objects/ThreadTypes.ts";
 import { Title } from "../Title.tsx";
 import { Counters } from "../Counters.tsx";
-import { getPost } from "../../database/queries/PostQueries.ts";
-import { PostDocument } from "../../types/documents/PostDocument.ts";
+import { PostDocument } from "../../types/objects/PostTypes.ts";
 import { TagList } from "../tags/TagList.tsx";
 import { Loading } from "../Loading.tsx";
+import {getPostById} from "../../database/queries/PostQueries.ts";
 
 export const ThreadPage = (): React.ReactNode => {
     const { threadId } = useParams();
@@ -27,7 +27,7 @@ export const ThreadPage = (): React.ReactNode => {
                     return;
                 }
                 setThread(data);
-                getPost(data)
+                getPostById(data.post.id)
                     .then((post) => {
                         if (!post) {
                             return;

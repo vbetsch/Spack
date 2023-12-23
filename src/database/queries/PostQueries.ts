@@ -1,15 +1,19 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase.ts";
 import { DatabaseCollectionEnum } from "../../types/DatabaseCollectionEnum.ts";
-import { PostDocument } from "../../types/documents/PostDocument.ts";
-import { ThreadDocument } from "../../types/documents/ThreadDocument.ts";
+import {
+    CreatePostDataDto,
+    CreatePostDto,
+    InitialPostDto,
+    PostDocument,
+} from "../../types/objects/PostTypes.ts";
 
-export const getPost = async (
-    thread: ThreadDocument,
+export const getPostById = async (
+    id: string,
 ): Promise<PostDocument | undefined> => {
     try {
         const postSnap = await getDoc(
-            doc(db, DatabaseCollectionEnum.POSTS, thread.post.id),
+            doc(db, DatabaseCollectionEnum.POSTS, id),
         );
         if (postSnap == null) {
             return;
@@ -18,6 +22,31 @@ export const getPost = async (
             id: postSnap.id,
             ...postSnap.data(),
         } as unknown as PostDocument;
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+export const createPost = async (data: CreatePostDataDto) => {
+    try {
+        console.log(
+            "(23/12/2023 02:02)  @reyks  [PostQueries.ts:29 -  - createPost]  Math.floor(Date.now() / 1000)  ",
+            Math.floor(Date.now() / 1000),
+        );
+        const initialPostData: InitialPostDto = {
+            createdDate: Math.floor(Date.now() / 1000),
+            bookmarks: [],
+            nbLikes: 0,
+            nbViews: 0,
+        };
+        const newPost: CreatePostDto = {
+            ...initialPostData,
+            ...data,
+        };
+        return await addDoc(
+            collection(db, DatabaseCollectionEnum.POSTS),
+            newPost,
+        );
     } catch (e) {
         console.error(e);
     }

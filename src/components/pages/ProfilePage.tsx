@@ -3,7 +3,7 @@ import { Title } from "../Title.tsx";
 import { UserContext } from "../../providers/UserProvider.tsx";
 import { UserActionEnum } from "../../reducers/UserReducer.ts";
 import { LoadingButton } from "@mui/lab";
-import type { PostDocument } from "../../types/documents/PostDocument.ts";
+import type { PostDocument } from "../../types/objects/PostTypes.ts";
 import type { AuthUser } from "../../types/AuthUserType.ts";
 import { Loading } from "../Loading.tsx";
 import { ConfigContext } from "../../providers/ConfigProvider.tsx";

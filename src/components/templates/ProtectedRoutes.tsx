@@ -4,8 +4,8 @@ import { UserContext } from "../../providers/UserProvider.tsx";
 import { Navigate, useLocation } from "react-router";
 import { Outlet } from "react-router-dom";
 import { getUser } from "../../database/queries/UserQueries.ts";
-import { UserDocument } from "../../types/documents/UserDocument.ts";
 import { UserActionEnum } from "../../reducers/UserReducer.ts";
+import { UserDocument } from "../../types/objects/UserTypes.ts";
 
 export const ProtectedRoutes = (): ReactNode => {
     const user = localStorage.getItem("@user");
