@@ -27,14 +27,6 @@ export const ProfilePage = (): React.ReactNode => {
     useEffect(() => {
         if (userData != null) {
             const dataUser: OriginalAuthUser = JSON.parse(userData);
-            console.log(
-                "(23/12/2023 04:22)  @reyks  [ProfilePage.tsx:30 -  - ]  dataUser.createdAt  ",
-                dataUser.createdAt,
-            );
-            console.log(
-                "(23/12/2023 04:22)  @reyks  [ProfilePage.tsx:30 -  - ]  dataUser.lastLoginAt  ",
-                dataUser.lastLoginAt,
-            );
             setUser({
                 ...dataUser,
                 createdAt: new Date(Number(dataUser.createdAt)),

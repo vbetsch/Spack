@@ -128,42 +128,6 @@ export const Counters = ({
 
     const saveOrUnsavepost = (save: boolean) => {
         const icon = save ? faBookmarkEnable : faBookmarkDefault;
-        // TODO: const actionToUserBookmarks = save
-        //     ? addUserBookmark
-        //     : removeUserBookmark;
-        // TODO: const actionToPostBookmarks = save
-        //     ? addPostBookmark
-        //     : removePostBookmark;
-
-        // if (!post) {
-        //     console.warn("The post is not yet loaded");
-        //     return;
-        // }
-        // if (!state.currentUser) {
-        //     console.warn("You are not login");
-        //     return;
-        // }
-        //
-        // if (save) {
-        //     createAndGetBookmark({
-        //         postId: post.id,
-        //         userId: state.currentUser.id,
-        //     }).catch((e) => {
-        //         console.error(e);
-        //     });
-        // } else {
-        //     if (!bookmarkId) {
-        //         console.warn("Bookmark not found");
-        //         return;
-        //     }
-        //     deleteBookmark({
-        //         id: bookmarkId,
-        //         postId: post.id,
-        //         userId: state.currentUser.id,
-        //     }).catch((e) => {
-        //         console.error(e);
-        //     });
-        // }
 
         setBookmarkType(icon);
     };
@@ -182,25 +146,6 @@ export const Counters = ({
         } else {
             setLikeType(faHeartDefault);
         }
-
-        // if (bookmarkId) {
-        //     setBookmarkType(faBookmarkEnable);
-        // } else {
-        //     setBookmarkType(faBookmarkDefault);
-        // }
-
-        // if (post && state.currentUser) {
-        //     searchBookmark(post.id, state.currentUser.id)
-        //         .then((data) => {
-        //             if (!data) {
-        //                 return;
-        //             }
-        //             setBookmarkId(data.id);
-        //         })
-        //         .catch((e) => {
-        //             console.error(e);
-        //         });
-        // }
     }, [post]);
 
     return (
@@ -218,8 +163,8 @@ export const Counters = ({
             <div onClick={toggleSave} className="counter">
                 <span className="text">
                     {!loading && post?.bookmarks != null
-                          ? post.bookmarks.length
-                          : 0}
+                        ? post.bookmarks.length
+                        : 0}
                 </span>
                 <div className="icon">
                     <FontAwesomeIcon icon={bookmarkType} />

@@ -29,10 +29,6 @@ export const getPostById = async (
 
 export const createPost = async (data: CreatePostDataDto) => {
     try {
-        console.log(
-            "(23/12/2023 02:02)  @reyks  [PostQueries.ts:29 -  - createPost]  Math.floor(Date.now() / 1000)  ",
-            Math.floor(Date.now() / 1000),
-        );
         const initialPostData: InitialPostDto = {
             createdDate: Math.floor(Date.now() / 1000),
             bookmarks: [],

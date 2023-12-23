@@ -25,7 +25,6 @@ export const searchBookmark = async (
     postId: string,
     userId: string,
 ): Promise<BookmarkDocument | undefined> => {
-    console.log("(21/12/2023 23:29)  @reyks  [BookmarkQueries.ts:30 -  - searchBookmark]    ", );
     try {
         const searchQuery = query(
             collection(db, DatabaseCollectionEnum.BOOKMARKS),

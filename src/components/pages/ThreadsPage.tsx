@@ -96,10 +96,6 @@ export const ThreadsPage = (): React.ReactNode => {
     };
 
     const submitPost = (data: WritePostDto) => {
-        console.log(
-            "(23/12/2023 01:27)  @reyks  [ThreadsPage.tsx:45 -  - submitPost]    ",
-        );
-
         setError(undefined);
         setCreateThreadLoading(true);
 
