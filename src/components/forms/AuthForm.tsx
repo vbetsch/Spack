@@ -11,8 +11,8 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { FieldValues, useForm } from "react-hook-form";
-import { Title } from "./Title.tsx";
-import type { UserCredentialsDto } from "../types/dto/user/UserCredentialsDto.ts";
+import { UserCredentialsDto } from "../../types/dto/user/UserCredentialsDto.ts";
+import { Title } from "../Title.tsx";
 
 interface AuthFormProperties {
     title: string;

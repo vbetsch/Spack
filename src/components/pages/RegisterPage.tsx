@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { AuthForm } from "../AuthForm.tsx";
 import { useNavigate } from "react-router";
 import { FirebaseError } from "@firebase/util";
 import { createUser } from "../../database/queries/UserQueries.ts";
 import { FieldValues } from "react-hook-form";
+import {AuthForm} from "../forms/AuthForm.tsx";
 
 export const RegisterPage = (): React.ReactNode => {
     const [error, setError] = useState<string | undefined>(undefined);
