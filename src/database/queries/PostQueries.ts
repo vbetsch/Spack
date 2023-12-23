@@ -4,13 +4,13 @@ import { DatabaseCollectionEnum } from "../../types/DatabaseCollectionEnum.ts";
 import {
     CreatePostDataDto,
     CreatePostDto,
-    InitialPostDto,
+    InitialPostDto, OriginalPostDocument,
     PostDocument,
 } from "../../types/objects/PostTypes.ts";
 
 export const getPostById = async (
     id: string,
-): Promise<PostDocument | undefined> => {
+): Promise<OriginalPostDocument | undefined> => {
     try {
         const postSnap = await getDoc(
             doc(db, DatabaseCollectionEnum.POSTS, id),
@@ -21,7 +21,7 @@ export const getPostById = async (
         return {
             id: postSnap.id,
             ...postSnap.data(),
-        } as unknown as PostDocument;
+        } as unknown as OriginalPostDocument;
     } catch (e) {
         console.error(e);
     }

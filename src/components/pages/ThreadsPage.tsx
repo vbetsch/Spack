@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Title } from "../Title.tsx";
 import type {
     CreateThreadDataDto,
@@ -16,7 +16,8 @@ import { CreatePostDataDto } from "../../types/objects/PostTypes.ts";
 import { UserContext } from "../../providers/UserProvider.tsx";
 import {
     createThread,
-    getThreadById, getThreads,
+    getThreadById,
+    getThreads,
 } from "../../database/queries/ThreadQueries.ts";
 
 export const ThreadsPage = (): React.ReactNode => {
@@ -129,6 +130,7 @@ export const ThreadsPage = (): React.ReactNode => {
             })
             .finally(() => {
                 setCreateThreadLoading(false);
+                setModalOpen(false);
             });
     };
 
@@ -159,7 +161,7 @@ export const ThreadsPage = (): React.ReactNode => {
             </div>
             <div className="threads">
                 {threadsLoading && <Loading />}
-                {threads
+                {threads && threads.length > 0
                     ? threads.map((thread, key) => (
                           <Thread key={key} data={thread} />
                       ))

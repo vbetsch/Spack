@@ -49,7 +49,7 @@ export const createThread = async (data: CreateThreadDataDto) => {
             ...data,
         };
         return await addDoc(
-            collection(db, DatabaseCollectionEnum.POSTS),
+            collection(db, DatabaseCollectionEnum.THREADS),
             newPost,
         );
     } catch (e) {

@@ -3,10 +3,23 @@ import type { UserDocument } from "./UserTypes.ts";
 import type { BookmarkDocument } from "./BookmarkTypes.ts";
 import type { Timestamp } from "firebase/firestore";
 
-export interface PostDocument {
+export interface OriginalPostDocument {
     id: string;
     createdDate: Timestamp;
     modifiedDate: Timestamp;
+    content: string;
+    creator: UserDocument;
+    parent?: PostDocument;
+    children: PostDocument[];
+    thread: ThreadDocument;
+    bookmarks: BookmarkDocument[];
+    nbLikes: number;
+    nbViews: number;
+}
+export interface PostDocument {
+    id: string;
+    createdDate: Date;
+    modifiedDate?: Date;
     content: string;
     creator: UserDocument;
     parent?: PostDocument;

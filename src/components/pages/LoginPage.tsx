@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import type { FieldValues } from "react-hook-form";
-import { FirebaseError } from "@firebase/util";
 import { UserContext } from "../../providers/UserProvider.tsx";
 import { UserActionEnum } from "../../reducers/UserReducer.ts";
 import { signIn } from "../../database/queries/UserQueries.ts";
-import {AuthForm} from "../forms/AuthForm.tsx";
+import { AuthForm } from "../forms/AuthForm.tsx";
 
 export const LoginPage = (): React.ReactNode => {
     const [error, setError] = useState<string | undefined>(undefined);
@@ -17,45 +16,26 @@ export const LoginPage = (): React.ReactNode => {
         setError(undefined);
         setLoading(true);
         signIn(data)
-            .then((snap) => {
-                if (!snap) {
+            .then((result) => {
+                if (typeof result === "string") {
+                    setError(result);
+                    return;
+                }
+                if (!result) {
+                    setError("Une erreur s'est produite");
                     return;
                 }
                 dispatch({
                     type: UserActionEnum.LOGIN,
                     payload: {
-                        id: snap.id,
-                        ...snap.data(),
+                        id: result.id,
+                        ...result.data(),
                     },
                 });
                 navigate("/profile");
             })
-            .catch((error: unknown) => {
-                if (!(error instanceof FirebaseError)) {
-                    setError("An error has occurred");
-                    return;
-                }
-                switch (error.code) {
-                    case "auth/invalid-credential":
-                        setError(
-                            "Les informations que vous avez renseignées sont fausses",
-                        );
-                        break;
-                    case "auth/invalid-email":
-                        setError("Le format de l'email est invalide");
-                        break;
-                    case "auth/email-already-in-use":
-                        setError("L'email est déjà utilisé'");
-                        break;
-                    case "auth/too-many-requests":
-                        setError(
-                            "Trop de requêtes envoyées au serveur. Patientez quelques instants...",
-                        );
-                        break;
-                    default:
-                        setError("Une erreur est survenue : " + error.code);
-                        break;
-                }
+            .catch((e) => {
+                console.error(e);
             })
             .finally(() => {
                 setLoading(false);

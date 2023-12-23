@@ -25,7 +25,7 @@ export const Navbar = (): React.ReactNode => {
                         Bookmarks
                     </Link>
                     <Link className="links" to={"/profile"}>
-                        Profile
+                        Profil
                     </Link>
                 </div>
             )}

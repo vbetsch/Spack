@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getThreadById } from "../../database/queries/ThreadQueries.ts";
 import { ThreadDocument } from "../../types/objects/ThreadTypes.ts";
@@ -7,9 +7,11 @@ import { Counters } from "../Counters.tsx";
 import { PostDocument } from "../../types/objects/PostTypes.ts";
 import { TagList } from "../tags/TagList.tsx";
 import { Loading } from "../Loading.tsx";
-import {getPostById} from "../../database/queries/PostQueries.ts";
+import { getPostById } from "../../database/queries/PostQueries.ts";
+import { ConfigContext } from "../../providers/ConfigProvider.tsx";
 
 export const ThreadPage = (): React.ReactNode => {
+    const { state } = useContext(ConfigContext);
     const { threadId } = useParams();
     const [loading, setLoading] = useState<boolean>(false);
     const [thread, setThread] = useState<ThreadDocument | undefined>(undefined);
@@ -32,7 +34,16 @@ export const ThreadPage = (): React.ReactNode => {
                         if (!post) {
                             return;
                         }
-                        setPost(post);
+                        const dateCreated = new Date(
+                            post.createdDate.seconds * 1000,
+                        );
+                        setPost({
+                            ...post,
+                            createdDate: dateCreated,
+                            modifiedDate: post.modifiedDate
+                                ? new Date(post.modifiedDate.seconds * 1000)
+                                : dateCreated,
+                        });
                     })
                     .catch((e) => {
                         console.error(e);
@@ -48,73 +59,81 @@ export const ThreadPage = (): React.ReactNode => {
 
     return (
         <div className="container">
-            {loading ? (
-                <Loading />
-            ) : (
-                thread && (
-                    <div className="thread-details">
-                        <div className="left-part">
-                            <Counters
-                                loading={loading}
-                                setLoading={setLoading}
-                                post={post}
-                                setPost={setPost}
-                            />
-                        </div>
-                        <div className="right-part">
-                            <div className="right-part-content">
+            {thread && (
+                <div className="thread-details">
+                    <div className="left-part">
+                        <Counters
+                            loading={loading}
+                            setLoading={setLoading}
+                            post={post}
+                            setPost={setPost}
+                        />
+                    </div>
+                    <div className="right-part">
+                        <div className="right-part-content">
+                            {loading ? (
+                                <Loading />
+                            ) : (
                                 <Title text={thread.title} />
-                                <div className="infos">
-                                    <div className="info">
-                                        <p>
-                                            Created{" "}
-                                            <span>
-                                                {loading && <Loading />}
-                                                {post && post.createdDate
-                                                    ? post.createdDate
-                                                          .toDate()
-                                                          .toDateString()
-                                                    : "unknown"}
-                                            </span>
-                                        </p>
-                                    </div>
-                                    {/* TODO: Create "by creator" */}
-                                    <div className="info">
-                                        <p>
-                                            Modified{" "}
-                                            <span>
-                                                {loading && <Loading />}
-                                                {post && post.modifiedDate
-                                                    ? post.modifiedDate
-                                                          .toDate()
-                                                          .toDateString()
-                                                    : "unknown"}
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <div className="info">
-                                        <p>
-                                            Views{" "}
-                                            <span>
-                                                {loading && <Loading />}
-                                                {post && post.nbViews
-                                                    ? post.nbViews
-                                                    : "unknown"}
-                                            </span>
-                                        </p>
-                                    </div>
+                            )}
+                            <div className="infos">
+                                <div className="info">
+                                    <p>
+                                        Created{" "}
+                                        <span>
+                                            {loading ? (
+                                                <Loading />
+                                            ) : post && post.createdDate ? (
+                                                post.createdDate.toLocaleDateString(
+                                                    state.lang,
+                                                )
+                                            ) : (
+                                                "unknown"
+                                            )}
+                                        </span>
+                                    </p>
                                 </div>
-                                <div className="separator">
-                                    <TagList tags={thread.tags} />
+                                {/* TODO: Create "by creator" */}
+                                <div className="info">
+                                    <p>
+                                        Modified{" "}
+                                        <span>
+                                            {loading ? (
+                                                <Loading />
+                                            ) : post && post.modifiedDate ? (
+                                                post.modifiedDate.toLocaleDateString(
+                                                    state.lang,
+                                                )
+                                            ) : (
+                                                "unknown"
+                                            )}
+                                        </span>
+                                    </p>
                                 </div>
-                                <div className="content">
-                                    {loading && <Loading />}
-                                    {post && post.content}
+                                <div className="info">
+                                    <p>
+                                        Views{" "}
+                                        <span>
+                                            {loading ? (
+                                                <Loading />
+                                            ) : post && post.nbViews ? (
+                                                post.nbViews
+                                            ) : (
+                                                "unknown"
+                                            )}
+                                        </span>
+                                    </p>
                                 </div>
+                            </div>
+                            <div className="separator">
+                                {thread.tags && <TagList tags={thread.tags} />}
+                            </div>
+                            <div className="content">
+                                {loading ? <Loading /> : post && post.content}
                             </div>
                         </div>
                     </div>
-                )
+                </div>
             )}
         </div>
     );

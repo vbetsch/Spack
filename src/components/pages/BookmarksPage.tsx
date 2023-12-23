@@ -22,7 +22,7 @@ export const BookmarksPage = (): React.ReactNode => {
                     <p key={key}>{bookmark.toString()}</p>
                 ))
             ) : (
-                <p>Vous avez aucun élément sauvegardé.</p>
+                <p>Vous n'avez aucun élément sauvegardé.</p>
             )}
         </div>
     );

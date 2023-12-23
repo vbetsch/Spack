@@ -173,6 +173,10 @@ export const Counters = ({
             return;
         }
 
+        if (!state.currentUser || !state.currentUser.likedPosts) {
+            return;
+        }
+
         if (state.currentUser?.likedPosts.includes(post.id)) {
             setLikeType(faHeartEnable);
         } else {
@@ -204,11 +208,7 @@ export const Counters = ({
             <div onClick={toggleLike} className="counter">
                 <span className="text">
                     <span>
-                        {loading
-                            ? "--"
-                            : post?.nbLikes != null
-                              ? post.nbLikes
-                              : 0}
+                        {!loading && post?.nbLikes != null ? post.nbLikes : 0}
                     </span>
                 </span>
                 <div className="icon">
@@ -217,9 +217,7 @@ export const Counters = ({
             </div>
             <div onClick={toggleSave} className="counter">
                 <span className="text">
-                    {loading
-                        ? "--"
-                        : post?.bookmarks != null
+                    {!loading && post?.bookmarks != null
                           ? post.bookmarks.length
                           : 0}
                 </span>

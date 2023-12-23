@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { Counters } from "./Counters.tsx";
 import { TagList } from "./tags/TagList.tsx";
 import { Loading } from "./Loading.tsx";
-import {getPostById} from "../database/queries/PostQueries.ts";
+import { getPostById } from "../database/queries/PostQueries.ts";
 
 interface ThreadProperties {
     data: ThreadDocument;
@@ -17,6 +17,9 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!data.post) {
+            return;
+        }
         setLoading(true);
         getPostById(data.post.id)
             .then((post) => {
@@ -50,7 +53,7 @@ export const Thread = ({ data }: ThreadProperties): React.ReactNode => {
                     {loading && <Loading />}
                     {post?.content}
                 </p>
-                <TagList tags={data.tags} />
+                {data.tags && <TagList tags={data.tags} />}
             </div>
         </div>
     );

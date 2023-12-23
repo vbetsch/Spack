@@ -4,9 +4,10 @@ import { UserContext } from "../../providers/UserProvider.tsx";
 import { UserActionEnum } from "../../reducers/UserReducer.ts";
 import { LoadingButton } from "@mui/lab";
 import type { PostDocument } from "../../types/objects/PostTypes.ts";
-import type { AuthUser } from "../../types/AuthUserType.ts";
+import type { AuthUser } from "../../types/AuthUserTypes.ts";
 import { Loading } from "../Loading.tsx";
 import { ConfigContext } from "../../providers/ConfigProvider.tsx";
+import { OriginalAuthUser } from "../../types/AuthUserTypes.ts";
 
 export const ProfilePage = (): React.ReactNode => {
     const configContext = useContext(ConfigContext);
@@ -25,9 +26,19 @@ export const ProfilePage = (): React.ReactNode => {
 
     useEffect(() => {
         if (userData != null) {
-            const dataUser = JSON.parse(userData);
+            const dataUser: OriginalAuthUser = JSON.parse(userData);
+            console.log(
+                "(23/12/2023 04:22)  @reyks  [ProfilePage.tsx:30 -  - ]  dataUser.createdAt  ",
+                dataUser.createdAt,
+            );
+            console.log(
+                "(23/12/2023 04:22)  @reyks  [ProfilePage.tsx:30 -  - ]  dataUser.lastLoginAt  ",
+                dataUser.lastLoginAt,
+            );
             setUser({
                 ...dataUser,
+                createdAt: new Date(Number(dataUser.createdAt)),
+                lastLoginAt: new Date(Number(dataUser.lastLoginAt)),
             });
         }
         if (userContext.state.currentUser != null) {
@@ -37,26 +48,21 @@ export const ProfilePage = (): React.ReactNode => {
 
     return (
         <div className="container">
-            <Title text={"Profile"} />
-            <p>
-                <strong>UID</strong> : {user != null ? user.uid : <Loading />}
-            </p>
+            <Title text={"Profil"} />
             <p>
                 <strong>Créé le</strong> :{" "}
-                {user != null ? (
-                    user.createdAt
-                        .toDate()
-                        .toLocaleString(configContext.state.lang)
+                {user != null && user.createdAt ? (
+                    user.createdAt.toLocaleString(configContext.state.lang)
                 ) : (
                     <Loading />
                 )}
             </p>
             <p>
                 <strong>Dernière connexion</strong> :{" "}
-                {user != null ? (
-                    user.lastLoginAt
-                        .toDate()
-                        .toLocaleString(configContext.state.lang)
+                {user != null && user.lastLoginAt ? (
+                    user.lastLoginAt.toLocaleString(
+                        configContext.state.lang,
+                    )
                 ) : (
                     <Loading />
                 )}
@@ -74,7 +80,7 @@ export const ProfilePage = (): React.ReactNode => {
                     <p key={key}>{comment.toString()}</p>
                 ))
             ) : (
-                <p>Nothing</p>
+                <p>Aucun</p>
             )}
             <LoadingButton variant="contained" onClick={logOut}>
                 <span>Logout</span>
