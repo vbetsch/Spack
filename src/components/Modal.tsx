@@ -8,6 +8,7 @@ interface ModalProps {
     onClose: () => void;
     children: ReactNode;
     position?: number;
+    width?: number;
 }
 
 export const Modal = ({
@@ -15,6 +16,7 @@ export const Modal = ({
     onClose,
     children,
     position = 0,
+    width = 30,
 }: ModalProps): React.ReactNode => {
     const outsideReference = React.useRef(null);
 
@@ -27,14 +29,14 @@ export const Modal = ({
     };
 
     return isOpen ? (
-        <div className={"modal"} style={{top: -position}}>
+        <div className={"modal"} style={{ top: -position }}>
             <div
                 ref={outsideReference}
                 className={"modal__overlay"}
                 onClick={handleCloseOnOverlay}
-                style={{top: position}}
+                style={{ top: position }}
             />
-            <div className={"modal__box"}>
+            <div className={"modal__box"} style={{ width: width + "%" }}>
                 <button className={"modal__close"} onClick={onClose}>
                     <FontAwesomeIcon icon={faXmark as IconProp} />
                 </button>

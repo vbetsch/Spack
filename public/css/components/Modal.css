@@ -1,84 +1,54 @@
 /* Modal */
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  font-weight: normal;
+    position: fixed;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    font-weight: normal;
 }
 
-.modal__overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  cursor: pointer;
+.modal .modal__overlay {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
 }
 
-.modal__box {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 30%;
-  margin: 0 10%;
-  padding: 30px 50px 35px 50px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  background-color: var(--white);
-  cursor: auto;
+.modal .modal__box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0 10%;
+    padding: 30px 50px 35px 50px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: var(--white);
+    cursor: auto;
 }
 
-.modal__title {
-  color: #9e25fc;
-  font-size: 30px;
+.modal .modal__box .modal__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    transform-origin: 50% 50%;
+    font-size: 20px;
+    background: none;
+    border: none;
 }
 
-.modal__content {
-  margin-top: 30px;
-  color: #6b6b6b;
-  font-size: 16px;
+/* Form */
+.modal .modal__box .form .form-content {
+    width: 80%;
 }
-
-.modal__close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  transform-origin: 50% 50%;
-  font-size: 20px;
-  background: none;
-  border: none;
+.modal .modal__box .form .form-content .form-fields {
+    height: fit-content;
 }
-
-.modal__buttons {
-  display: flex;
-  padding: 10px 0 0 0;
-  justify-content: end;
-  gap: 5px;
-}
-
-.modal__buttons .delete {
-  background-color: red;
-  border-color: red;
-}
-
-.modal__buttons .delete:hover {
-  background-color: var(--white);
-}
-.modal__buttons .delete:hover .fabutton-content {
-  color: red;
-}
-
-.modal__buttons .cancel {
-  background-color: var(--white);
-}
-
-.modal__buttons .cancel .fabutton-content {
-  color: var(--dark);
+.modal .modal__box .form .form-content .MuiButton-startIcon > :nth-of-type(1) {
+    font-size: 16px;
 }

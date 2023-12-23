@@ -67,7 +67,6 @@ export const LoginPage = (): React.ReactNode => {
             <AuthForm
                 title={"Login"}
                 loading={loading}
-                passwordError={undefined}
                 backEndError={error}
                 onSubmit={onSubmit}
                 textButton={"Login"}

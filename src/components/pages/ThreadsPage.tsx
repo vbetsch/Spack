@@ -7,6 +7,7 @@ import { Loading } from "../Loading.tsx";
 import { Button } from "../Button.tsx";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { Modal } from "../Modal.tsx";
+import { CreateThreadForm } from "../forms/CreateThreadForm.tsx";
 
 export const ThreadsPage = (): React.ReactNode => {
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
@@ -48,21 +49,28 @@ export const ThreadsPage = (): React.ReactNode => {
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => setModalOpen(false)}
-                position={300}
+                position={150}
+                width={40}
             >
-                <p>test</p>
+                <CreateThreadForm
+                    title={"Write a post"}
+                    loading={createThreadLoading}
+                    backEndError={backEndError}
+                    textButton={"Write"}
+                    onSubmit={submitPost}
+                />
             </Modal>
             <div className="header">
                 <Title text={"All posts"} />
                 <Button
                     img={faPen}
                     text={"Write post"}
-                    loading={loading}
-                    action={writePost}
+                    loading={createThreadLoading}
+                    action={() => setModalOpen(true)}
                 />
             </div>
             <div className="threads">
-                {loading && <Loading />}
+                {threadsLoading && <Loading />}
                 {threads?.map((thread, key) => (
                     <Thread key={key} data={thread} />
                 ))}
